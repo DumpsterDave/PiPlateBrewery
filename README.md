@@ -2,7 +2,7 @@
 Brewery controller software for a Raspberry Pi coupled with a DAQC2 and THERMOplate from Pi-Plates.
 
 # Configuration
-You will need to create a conf.json file in the py folder on your device to utilize the Azure logging function.  Format of the file should be:
+You will need to create a conf.json or rename conf_template.json to conf.json file in the py folder on your device to utilize the Azure logging function.  Format of the file should be:
 ```
 {	
     "WorkspaceId": "",	
