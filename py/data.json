@@ -1,0 +1,22 @@
+{
+    "MtAuto": 150,
+    "HltAuto": 151,
+    "BkStatus": 0,
+    "BkMode": "M",
+    "HltStatus": 0,
+    "HltHsTemp": 24.86,
+    "BkAuto": 212,
+    "MtTemp": 68.675,
+    "HltDelta": 1,
+    "BkTemp": 68.225,
+    "MtDelta": 1,
+    "HltMan": 50,
+    "BkMan": 40,
+    "CpuTemp": 53.069,
+    "BkHsTemp": 25.6,
+    "HltCycle": 10,
+    "BkCycle": 10,
+    "HltTemp": 67.55,
+    "HltMode": "A",
+    "BkDelta": 1
+}

@@ -1,0 +1,401 @@
+body{
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #00ff00;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+}
+
+div {
+    overflow: hidden;
+}
+
+td {
+    width: 100%;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.Label {
+    font-weight: bold;
+    font-size: 47px;
+    width: 33%;
+}
+
+.TempOk {
+    background-color: #22b14c80;
+}
+
+.TempLow {
+    background-color: #3f48cc80;
+}
+
+.TempWarn {
+    background-color: #fff20080;
+}
+
+.TempHigh {
+    background-color: #ed1c2480;
+}
+
+.TempMan {
+    background-color: #aa00aa80;
+}
+
+.Temp {
+    font-size: 47px;
+}
+
+.TunLabel {
+    float: left;
+    padding-left: 16px;
+    width: 384px;
+    font-size: 47px;
+    line-height: 64px;
+    text-align: left;
+}
+
+.TunTemp {
+    font-size: 100px;
+    line-height: 128px;
+    text-align: center;
+}
+
+.ModeAuto {
+    position: absolute;
+    left: 0px;
+    top: 384px;
+    background-color: #ffae0d80;
+    color: #000;
+    width: 384px;
+    height: 128px;
+    font-size: 100px;
+    line-height: 128px;
+    border-radius: 0px;
+    text-align: center;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.ModeMan {
+    position: absolute;
+    left: 0px;
+    top: 384px;
+    background-color: #aa00aa80;
+    color: #000;
+    width: 384px;
+    height: 128px;
+    font-size: 100px;
+    line-height: 128px;
+    border-radius: 0px;
+    text-align: center;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.Man {
+    background-color: #a0a;
+    color: #000;
+    border: 0px;
+    border-bottom-left-radius: 8px;
+}
+
+.SetButton {
+    width: 166px;
+    height: 166px;
+    border: 1px solid #fff;
+    border-radius: 8px;
+    font-size: 150px;
+    line-height: 166px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.SetButtonDouble {
+    width: 366px;
+    height: 166px;
+    border: 1px solid #fff;
+    border-radius: 8px;
+    font-size: 166px;
+    line-height: 166px;
+    text-align: center;
+    grid-column: span 2;
+    cursor: pointer;
+}
+
+.SetTargetLabel {
+    font-weight: bold;
+    font-size: 47px;
+}
+
+.SetTargetValue {
+    font-size: 150px;   
+    line-height: 320px;
+    text-align: center;
+}
+
+.SettingsHeader {
+    font-size: 40px;
+    text-align: right;
+}
+
+.SettingsText {
+    height: 128px;
+    font-size: 120px;
+    line-height: 128px;
+    grid-row: span 2;
+    text-align: right;
+}
+
+.SettingsLabel {
+    height: 128px;
+    font-size: 120px;
+    line-height: 128px;
+    grid-row: span 2;
+    text-align: left;
+}
+
+.SettingsUpDown {
+    height: 64; 
+    cursor: pointer;   
+}
+
+.SettingsButton {
+    position: absolute;
+    top: 650px;
+    height: 126px;
+    width: 256px;
+    font-size: 100px;
+    line-height: 126px;
+    border: 1px solid;
+    border-radius: 8px;
+    text-align: center;
+    cursor: pointer;
+}
+
+#Main{
+    position: relative;
+    background-color: #333333;
+    width: 1280px;
+    height: 800px;
+    overflow: hidden;
+    background-image: url("img/ssblogo.png");
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+#HltHsContainer {
+    position: absolute;
+    left: 32px;
+    top: 32px;
+    width: 384px;
+    height: 64px;
+    border-radius: 8px;
+}
+
+#EncContainer {
+    position: absolute;
+    left: 448px;
+    top: 32px;
+    width: 384px;
+    height: 64px;
+    border-radius: 8px;
+}
+
+#BkHsContainer {
+    position: absolute;
+    left: 864px;
+    top: 32px;
+    width: 384px;
+    height: 64px;
+    border-radius: 8px;
+}
+
+#HltContainer {
+    position: absolute;
+    left: 32px;
+    top: 128px;
+    width: 384px;
+    height: 512px;
+    border-radius: 8px;
+    border: 1px solid #fff;
+    border-top: none;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+#HltTemp {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 384px;
+    height: 384px;
+    text-align: center;
+    line-height: 384px;
+    font-size: 96px;
+    cursor: pointer;
+}
+
+#MtContainer {
+    position: absolute;
+    left: 448px;
+    top: 128px;
+    width: 384px;
+    height: 512px;
+    border-radius: 8px;
+    border: 1px solid #fff;
+    border-top: none;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+#MtTemp {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 384px;
+    height: 384px;
+    text-align: center;
+    line-height: 384px;
+    font-size: 96px;
+    cursor: pointer;
+}
+
+#BkContainer {
+    position: absolute;
+    left: 864px;
+    top: 128px;
+    width: 384px;
+    height: 512px;
+    border-radius: 8px;
+    border: 1px solid #fff;
+    border-top: none;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+#BkTemp {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 384px;
+    height: 384px;
+    text-align: center;
+    line-height: 192px;
+    font-size: 96px;
+    cursor: pointer;
+}
+
+#Runtime {
+    position: absolute;
+    left: 32px;
+    top: 704px;
+    font-size: 30px;
+    line-height: 32px;
+}
+
+#Refresh {
+    position: absolute;
+    left: 896px;
+    top: 704px;
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
+}
+
+#Azure {
+    position: absolute;
+    left: 992px;
+    top: 704px;
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
+}
+
+#TempC {
+    position: absolute;
+    left: 1088px;
+    top: 704px;
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
+}
+
+#Config {
+    position: absolute;
+    left: 1184px;
+    top: 704px;
+    width: 64px;
+    height: 64px;
+    cursor: pointer;
+}
+
+#SetTarget {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 1280px;
+    height: 800px;
+    background-color: #333333f7;
+    visibility: hidden;
+}
+
+#SetTargetButtons {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 800px;
+    height: 800px;
+    padding-left: 16px;
+    padding-top: 16px;
+
+    display: grid;
+    grid-template-columns: repeat(4, 168px);
+    grid-template-rows: repeat(4, 168px);
+    gap: 32px;
+}
+
+#SetTargetValues {
+    position: absolute;
+    left: 800px;
+    top: 0px;
+    width: 480px;
+    height: 800px;
+    padding: 16px;
+    
+    display: grid;
+    grid-template-columns: 448px;
+    grid-template-rows: 64px 320px 64px 320px;
+}
+
+#Settings {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 1280px;
+    height: 800px;
+    background-color: #333333f7;
+    visibility: hidden;
+}
+
+#SettingsGrid {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 1280px;
+    height: 800px;
+    margin-left: 16px;
+    margin-top: 16px;
+
+    display: grid;
+    grid-template-columns: 256px 64px 256px 64px 256px 64px;
+    grid-template-rows: repeat(8, 64px);
+    gap: 16px;
+}
+
