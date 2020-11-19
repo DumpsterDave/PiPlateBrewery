@@ -150,8 +150,10 @@ try:
                 TurnHLTOn()
                 HLTOn = ActionCount + (data['HltCycle'] * 2)
                 HLTOff = HLTOn - ((float(data['HltMan']) / 100) * (data['HltCycle'] * 2))
-            if HLTOff == ActionCount:
+            elif HLTOff == ActionCount:
                 TurnHLTOff()
+            elif HLTOn < ActionCount and HLTOff < ActionCount:
+                HLTOn = ActionCount + 1
         
         #BKControl
         if data['BkMode'] == 'A':
@@ -165,8 +167,10 @@ try:
                 TurnBKOn()
                 BKOn = ActionCount + (data['BkCycle'] * 2)
                 BKOff= BKOn - ((float(data['BkMan']) / 100) * (data['BkCycle'] * 2))
-            if BKOff == ActionCount:
+            elif BKOff == ActionCount:
                 TurnBKOff()
+            elif BKOn < ActionCount and BKOff < ActionCount:
+                BKOn = ActionCount + 1
 
         ActionCount += 1
 
