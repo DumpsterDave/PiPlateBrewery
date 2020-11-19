@@ -6,7 +6,7 @@ import hashlib
 import hmac
 import base64
 import time
-from datetime import datetime
+import datetime
 
 #Read Settings from JSON file
 try:
@@ -21,10 +21,10 @@ try:
     # The log type is the name of the event that is being submitted
     log_type = config["LogName"]
 except Exception as e:
-    now = datetime.now()
+    now = datetime.datetime.now()
     print(e)
     f = open('/var/www/html/python_errors.log', 'a')
-    f.write("%s - AZURE - %s" % (now.strftime("%Y-%m-%d %H:%M:%S"), e))
+    f.write("%s - AZURE - %s\n" % (now.strftime("%Y-%m-%d %H:%M:%S"), e))
     f.close()
 
 #####################
@@ -75,8 +75,8 @@ try:
         post_data(customer_id, shared_key, body, log_type)
         time.sleep(10)
 except Exception as e:
-    now = datetime.now()
+    now = datetime.datetime.now()
     print(e)
     f = open('/var/www/html/python_errors.log', 'a')
-    f.write("%s - AZURE - %s" % (now.strftime("%Y-%m-%d %H:%M:%S"), e))
+    f.write("%s - AZURE - %s\n" % (now.strftime("%Y-%m-%d %H:%M:%S"), e))
     f.close()

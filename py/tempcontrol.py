@@ -139,5 +139,5 @@ except Exception as e:
     now = datetime.now()
     print(e)
     f = open('/var/www/html/python_errors.log', 'a')
-    f.write("%s - AZURE - %s" % (now.strftime("%Y-%m-%d %H:%M:%S"), e))
+    f.write("%s - TEMP CONTROL - %s\n" % (now.strftime("%Y-%m-%d %H:%M:%S"), e))
     f.close()
