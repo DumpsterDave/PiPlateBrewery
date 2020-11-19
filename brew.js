@@ -188,13 +188,15 @@ function SetButtonClick(button) {
         MaxL = 3
     }
 
-    if (Temp.length < MaxL) {
+    if (Temp.length <= MaxL) {
         if ((button == 'D') && (Temp.length > 1)) {
             Temp = Temp.substr(0, Temp.length - 1);
         } else if (button == 'D') {
             Temp = "";
         } else {
-            Temp = Temp + button;
+            if (Temp.length < MaxL) {
+                Temp = Temp + button;
+            }
         }
     }
 
