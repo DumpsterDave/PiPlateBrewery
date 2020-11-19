@@ -6,6 +6,7 @@ from datetime import datetime
 import time
 import math
 import json
+import os
 
 try:
     #Variable Setup
@@ -92,6 +93,47 @@ try:
             f = open('/var/www/html/py/uptime', 'w')
             f.write(str(currTime - startTime))
             f.close()
+
+            #Check for Updated Targets
+                #Mode
+            if os.path.exists('/var/www/html/py/mode.json'):
+                f = open('/var/www/html/py/mode.json', 'r')
+                NewData = json.load(f)
+                f.close()
+                if NewData['Target'] == 'hlt':
+                    data['HltMode'] = NewData['NewMode']
+                elif NewData['Target'] == 'bk':
+                    data['BkMode'] = NewData['NewMode']
+                os.remove('/var/www/html/py/mode.json')
+
+                #Temp
+            if os.path.exists('/var/www/html/py/temp.json'):
+                f = open('/var/www/html/py/temp.json', 'r')
+                NewData = json.load(f)
+                f.close()
+                if NewData['Target'] == 'hlt' and NewData['Mode'] == 'a':
+                    data['HltAuto'] = NewData['Value']
+                elif NewData['Target'] == 'hlt' and NewData['Mode'] == 'm':
+                    data['HltMan'] = NewData['Value']
+                elif NewData['Target'] == 'mt' and NewData['Mode'] == 'a':
+                    data['MtAuto'] = NewData['Value']
+                elif NewData['Target'] == 'bk' and NewData['Mode'] == 'a':
+                    data['BkAuto'] = NewData['Value']
+                elif NewData['Target'] == 'bk' and NewData['Mode'] == 'm':
+                    data['BkMan'] = NewData['Value']
+                os.remove('/var/www/html/py/temp.json')
+
+                #Settings
+            if os.path.exists('/var/www/html/py/settings.json'):
+                f = open('/var/www/html/py/settings.json', 'r')
+                NewData = json.load(f)
+                f.close()
+                data['HltCycle'] = NewData['HltCycle']
+                data['HltDelta'] = NewData['HltDelta']
+                data['MtDelta'] = NewData['MtDelta']
+                data['BkCycle'] = NewData['BkCycle']
+                data['BkDelta'] = NewData['BkDelta']
+                os.remove('/var/www/html/py/settings.json')
 
         else:
             UpdateTemps = True

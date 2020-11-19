@@ -1,2 +1,6 @@
 *conf.json
 *.pid
+*.log
+*settings.json
+*temp.json
+*mode.json
