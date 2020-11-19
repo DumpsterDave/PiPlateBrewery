@@ -1,6 +1,23 @@
 # PiPlateBrewery
 Brewery controller software for a Raspberry Pi coupled with a DAQC2 and THERMOplate from Pi-Plates.  The interface is designed for a screen resolution of 1280x800.
 
+# Hardware
+The scripts here are written for a Raspberry Pi with a Pi-Plates DAQC2Plate and THERMOPlate attached.  The script is configued by default with the following assumptions:
+1. DAQC2 is on Address 1 with the following connected:
+    - DOUT0 is connected to the SSR that controls the Hot Liquid Tank Element
+    - DOUT1 is connected to the SSR that controls the Boil Kettle Element
+    - DOUT2 is connected to the Hot Liquid Tank Heatsink Fans
+    - DOUT3 is connected to the Boil Kettle Heatsink Fans
+    - ADC0 is connected to an LM35 sensor to monitor the Hot Liquor Tank Heat Sink Temp
+    - ADC1 is connected to an LM35 sensor to monitor the Boil Kettle Heat Sink Temp
+2. THERMOplate is on Address 0 with the following connected
+    - TEMP11 is connected to a DS18B20 sensor in the Hot Liquid Tank
+    - TEMP10 is connected to a DS18B20 sensor in the Mash Tun
+    - TEMP9 is connected to a DS18B20 sensor in the Boil Kettle
+Modification of the tempcontrol.py script will be required if you use different sensors or have them connected to different inputs/outputs.
+
+
+
 # Setup
 1. Update your Raspberry Pi `sudo apt-get update -y` followed by `sudo apt-get upgrade -y`
 2. Enable SPI on the Raspberry Pi.  This can be done either via the GUI or `sudo raspi-config`
@@ -28,7 +45,7 @@ The Raspberry Pi should reboot, Chromium should open fullscreen and you should s
 
 
 # Configuration
-You will need to create a conf.json or rename conf_template.json to conf.json file in the py folder on your device to utilize the Azure logging function.  Format of the file should be:
+You will need to create a conf.json or rename conf_template.json to conf.json file in the /var/www/html/py folder on your device to utilize the Azure logging function.  Format of the file should be:
 ```
 {	
     "WorkspaceId": "",	
