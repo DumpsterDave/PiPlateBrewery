@@ -63,8 +63,8 @@ def post_data(customer_id, shared_key, body, log_type):
        #print ('Accepted')
     #else:
         #print ("Response code: %i" % (response.status_code))
-try:
-    while True:
+while True:
+    try:
         #Read Current Data Points
         f = open('/var/www/html/py/data.json', 'r')
         data = json.load(f)
@@ -73,10 +73,10 @@ try:
         body = json.dumps(data)
 
         post_data(customer_id, shared_key, body, log_type)
-        time.sleep(10)
-except Exception as e:
-    now = datetime.datetime.now()
-    print(e)
-    f = open('/var/www/html/python_errors.log', 'a')
-    f.write("%s - AZURE - %s\n" % (now.strftime("%Y-%m-%d %H:%M:%S"), e))
-    f.close()
+    except Exception as e:
+        now = datetime.datetime.now()
+        print(e)
+        f = open('/var/www/html/python_errors.log', 'a')
+        f.write("%s - AZURE - %s\n" % (now.strftime("%Y-%m-%d %H:%M:%S"), e))
+        f.close()
+    time.sleep(10)
