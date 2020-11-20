@@ -160,7 +160,7 @@ try:
                 TurnHLTOn()
                 HltCycleLen = data['HltCycle'] * 2
                 HLTOn = ActionCount + HltCycleLen
-                HLTOff = HLTOn - ((float(data['HltMan']) / 100) * HltCycleLen)
+                HLTOff = ActionCount + ((float(data['HltMan']) / 100) * HltCycleLen)
             if HLTOff == ActionCount:
                 TurnHLTOff()
         
@@ -176,7 +176,7 @@ try:
                 TurnBKOn()
                 BkCycleLen = data['BkCycle'] * 2
                 BKOn = ActionCount + BkCycleLen
-                BKOff = BKOn - ((float(data['BkMan']) / 100) * BkCycleLen)
+                BKOff = ActionCount + ((float(data['BkMan']) / 100) * BkCycleLen)
             if BKOff == ActionCount:
                 TurnBKOff()
 
