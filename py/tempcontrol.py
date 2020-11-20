@@ -7,9 +7,10 @@ import time
 import math
 import json
 import os
-import atexit
 import sys
-import linecache
+import signal
+
+run = True
 
 try:
     #Variable Setup
@@ -73,16 +74,18 @@ try:
         DAQC2.clrDOUTbit(DP, 1)
         data['BkStatus'] = 0
 
-    def OnExit():
-        global DP
+    def OnKill(signum, frame):
+        global run, DP
+        run = False
         TurnHLTOff()
         TurnBKOff()
         DAQC2.clrDOUTbit(DP, 2)
         DAQC2.clrDOUTbit(DP, 3)
 
-    atexit.register(OnExit)
+    signal.signal(signal.SIGINT, OnKill)
+    signal.signal(signal.SIGTERM, OnKill)
 
-    while True:
+    while run:
         currTime = round(time.time(), 1)
 
         #Update existing values
@@ -201,3 +204,8 @@ except Exception as e:
     f = open('/var/www/html/python_errors.log', 'a')
     f.write("%s - TEMP CONTROL [%i] - %s\n" % (now.strftime("%Y-%m-%d %H:%M:%S"), sys.exc_info()[-1].tb_lineno, e))
     f.close()
+
+now = datetime.now()
+f = open('/var/www/html/python_errors.log', 'a')
+f.write("%s - TEMP CONTROL [0] - Exit called from interface\n" % (now.strftime("%Y-%m-%d %H:%M:%S")))
+f.close()
