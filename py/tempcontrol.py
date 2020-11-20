@@ -8,6 +8,8 @@ import math
 import json
 import os
 import atexit
+import sys
+import linecache
 
 try:
     #Variable Setup
@@ -195,7 +197,9 @@ try:
         time.sleep(0.5)
 except Exception as e:
     now = datetime.now()
+    tb = sys.exc_info()
+    LineNo = tb.tb_lineno
     print(e)
     f = open('/var/www/html/python_errors.log', 'a')
-    f.write("%s - TEMP CONTROL - %s\n" % (now.strftime("%Y-%m-%d %H:%M:%S"), e))
+    f.write("%s - TEMP CONTROL [%i] - %s\n" % (now.strftime("%Y-%m-%d %H:%M:%S"), LineNo, e))
     f.close()
