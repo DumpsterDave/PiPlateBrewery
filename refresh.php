@@ -10,6 +10,19 @@
         if (strlen($AzPID) == 0) {
             $AzPID = 0;
         }
+        ///
+        $Data->{"TcPID"} = $TcPID;
+        $Data->{"LaPID"} = $AzPID;
+        $Uptime = intval(file_get_contents('py/uptime'));
+        $Hrs = floor($Uptime / 3600);
+        $Min = floor($Uptime / 60 % 60);
+        $Sec = floor($Uptime % 60);
+        $Elapsed = sprintf('%02d:%02d:%02d', $Hrs, $Min, $Sec);
+        $Data->{"Elapsed"} = $Elapsed;
+        $JSON = json_encode($Data);
+        echo $JSON;
+        exit();
+        ///
         
         if ($Data->{'HltMode'} == 'A') {
             $HltSet = $Data->{'HltAuto'};
