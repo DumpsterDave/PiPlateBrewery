@@ -11,7 +11,7 @@
                     echo shell_exec($cmd);
                     break;
                 case "stoptc":
-                    $cmd = escapeshellcmd('sudo pkill -9 --pidfile /var/www/html/py/tc.pid');
+                    $cmd = escapeshellcmd('sudo pkill -2 --pidfile /var/www/html/py/tc.pid');
                     shell_exec(sprintf("%s 2>&1 &", $cmd));
                     file_put_contents('/var/www/html/py/tc.pid', '0');
                     break;
@@ -21,7 +21,7 @@
                     echo shell_exec($cmd);
                     break;
                 case "stopla":
-                    $cmd = escapeshellcmd('sudo pkill -9 --pidfile /var/www/html/py/az.pid');
+                    $cmd = escapeshellcmd('sudo pkill -2 --pidfile /var/www/html/py/az.pid');
                     shell_exec(sprintf("%s 2>&1 &", $cmd));
                     file_put_contents('/var/www/html/py/az.pid', '0');
                     break;
