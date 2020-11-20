@@ -8,7 +8,9 @@ import base64
 import time
 import datetime
 import sys
+import signal
 
+run = True
 #Read Settings from JSON file
 try:
     f = open('/var/www/html/py/conf.json', 'r')
@@ -61,11 +63,15 @@ def post_data(customer_id, shared_key, body, log_type):
     }
 
     response = requests.post(uri,data=body, headers=headers)
-    #if (response.status_code >= 200 and response.status_code <= 299):
-       #print ('Accepted')
-    #else:
-        #print ("Response code: %i" % (response.status_code))
-while True:
+
+def OnKill(signum, frame):
+    global run
+    run = False
+
+signal.signal(signal.SIGINT, OnKill)
+signal.signal(signal.SIGTERM, OnKill)
+
+while run:
     try:
         #Read Current Data Points
         f = open('/var/www/html/py/data.json', 'r')
@@ -82,3 +88,8 @@ while True:
         f.write("%s - AZURE [%i] - %s\n" % (now.strftime("%Y-%m-%d %H:%M:%S"), sys.exc_info()[-1].tb_lineno, e))
         f.close()
     time.sleep(LoopDelay)
+
+now = datetime.datetime.now()
+f = open('/var/www/html/python_errors.log', 'a')
+f.write("%s - AZURE [0] - Exit called by Interface\n" % (now.strftime("%Y-%m-%d %H:%M:%S")))
+f.close()
