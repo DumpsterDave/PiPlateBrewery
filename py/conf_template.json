@@ -1,5 +1,6 @@
 {	
     "WorkspaceId": "",	
     "WorkspaceKey": "",	
-    "LogName": ""	
+    "LogName": "",
+    "LogFrequency": 15	
 }	

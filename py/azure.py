@@ -7,6 +7,7 @@ import hmac
 import base64
 import time
 import datetime
+import sys
 
 #Read Settings from JSON file
 try:
@@ -20,6 +21,7 @@ try:
     shared_key = config["WorkspaceKey"]
     # The log type is the name of the event that is being submitted
     log_type = config["LogName"]
+    LoopDelay = config["LogFrequency"]
 except Exception as e:
     now = datetime.datetime.now()
     print(e)
@@ -77,6 +79,6 @@ while True:
         now = datetime.datetime.now()
         print(e)
         f = open('/var/www/html/python_errors.log', 'a')
-        f.write("%s - AZURE - %s\n" % (now.strftime("%Y-%m-%d %H:%M:%S"), e))
+        f.write("%s - AZURE [%i] - %s\n" % (now.strftime("%Y-%m-%d %H:%M:%S"), sys.exc_info()[-1].tb_lineno, e))
         f.close()
-    time.sleep(10)
+    time.sleep(LoopDelay)
