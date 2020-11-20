@@ -7,6 +7,7 @@ import time
 import math
 import json
 import os
+import atexit
 
 try:
     #Variable Setup
@@ -69,6 +70,15 @@ try:
         global data
         DAQC2.clrDOUTbit(DP, 1)
         data['BkStatus'] = 0
+
+    def OnExit():
+        global DP
+        TurnHLTOff()
+        TurnBKOff()
+        DAQC2.clrDOUTbit(DP, 2)
+        DAQC2.clrDOUTbit(DP, 3)
+
+    atexit.register(OnExit)
 
     while True:
         currTime = round(time.time(), 1)
@@ -140,7 +150,7 @@ try:
 
         #HLTControl
         if data['HltMode'] == 'A':
-            HLTOn = ActionCount + 5
+            HLTOn = ActionCount + 1
             if data['HltTemp'] < (data['HltAuto'] - data['HltDelta']):
                 TurnHLTOn()
             else:
@@ -148,16 +158,17 @@ try:
         else:
             if HLTOn == ActionCount:
                 TurnHLTOn()
-                HLTOn = ActionCount + (data['HltCycle'] * 2)
-                HLTOff = HLTOn - ((float(data['HltMan']) / 100) * (data['HltCycle'] * 2))
-            elif HLTOff == ActionCount:
+                HltCycleLen = data['HltCycle'] * 2
+                HLTOn = ActionCount + HltCycleLen
+                HLTOff = HLTOn - ((float(data['HltMan']) / 100) * HltCycleLen)
+            if HLTOff == ActionCount:
                 TurnHLTOff()
             elif HLTOn < ActionCount and HLTOff < ActionCount:
                 HLTOn = ActionCount + 1
         
         #BKControl
         if data['BkMode'] == 'A':
-            BKOn = ActionCount + 5
+            BKOn = ActionCount + 1
             if data['BkTemp'] < (data['BkAuto'] - data['BkDelta']):
                 TurnBKOn()
             else:
@@ -165,9 +176,10 @@ try:
         else:
             if BKOn == ActionCount:
                 TurnBKOn()
-                BKOn = ActionCount + (data['BkCycle'] * 2)
-                BKOff= BKOn - ((float(data['BkMan']) / 100) * (data['BkCycle'] * 2))
-            elif BKOff == ActionCount:
+                BkCycleLen = data['BkCycle'] * 2
+                BKOn = ActionCount + BkCycleLen
+                BKOff = BKOn - ((float(data['BkMan']) / 100) * BkCycleLen)
+            if BKOff == ActionCount:
                 TurnBKOff()
             elif BKOn < ActionCount and BKOff < ActionCount:
                 BKOn = ActionCount + 1
