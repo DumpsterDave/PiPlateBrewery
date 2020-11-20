@@ -197,9 +197,7 @@ try:
         time.sleep(0.5)
 except Exception as e:
     now = datetime.now()
-    tb = sys.exc_info()
-    LineNo = tb.tb_lineno
     print(e)
     f = open('/var/www/html/python_errors.log', 'a')
-    f.write("%s - TEMP CONTROL [%i] - %s\n" % (now.strftime("%Y-%m-%d %H:%M:%S"), LineNo, e))
+    f.write("%s - TEMP CONTROL [%i] - %s\n" % (now.strftime("%Y-%m-%d %H:%M:%S"), sys.exc_info()[-1].tb_lineno, e))
     f.close()
