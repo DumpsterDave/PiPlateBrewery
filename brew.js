@@ -80,6 +80,7 @@ function RefreshElements() {
             tempState = "TempOk";
             HLTPv = Values["HltTemp"];
             if (Values["HltMode"] == 'A') {
+                HltMode = 'A';
                 HLTSv = Values["HltAuto"];
                 if (HLTPv < (HLTSv - HltDelta)) {
                     tempState = "TempLow";
@@ -91,6 +92,7 @@ function RefreshElements() {
                 document.getElementById("HltMode").innerHTML = "AUTO";
                 document.getElementById("HltModeLink").onclick = function(){ChangeMode('hlt','M');}
             } else {
+                HltMode = 'M';
                 HLTSv = Values["HltMan"];
                 tempState = "TempMan";
                 document.getElementById("HltTempSet").innerHTML = HLTSv.toFixed(0) + "%";
@@ -118,6 +120,7 @@ function RefreshElements() {
             tempState = "TempOk";
             BKPv = Values["BkTemp"];
             if (Values["BkMode"] == 'A') {
+                BKMode = 'A';
                 BKSv = Values["BkAuto"];
                 if (BKPv < (BKSv - BkDelta)) {
                     tempState = "TempLow";
@@ -129,6 +132,7 @@ function RefreshElements() {
                 document.getElementById("BkMode").innerHTML = "AUTO";
                 document.getElementById("BkModeLink").onclick = function(){ChangeMode('bk','M');}
             } else {
+                BKMode = 'M';
                 BKSv = Values["BkMan"];
                 tempState = "TempMan";
                 document.getElementById("BkTempSet").innerHTML = BKSv.toFixed(0) + "%";
