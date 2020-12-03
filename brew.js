@@ -45,7 +45,7 @@ function RefreshElements() {
             LaPID = Values["LaPID"];
 
             //Process HLT Heatsink (Celcius)
-            HLTHeatsink =Values["HltHsTemp"];
+            HLTHeatsink = Values["HltHsTemp"];
             if (HLTHeatsink >= 80) {
                 tempState = "TempHigh";
             } else if (HLTHeatsink >= 70) {

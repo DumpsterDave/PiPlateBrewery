@@ -40,8 +40,8 @@ try:
         global DP
         corrected = 0
         try:
-            raw = DAQC2.getADC(DP,channel)
-            corrected = (raw * 505) / 10.24
+            vRef = DAQC2.getADC(DP,8) * 10
+            corrected = (DAQC2.getADC(DP,channel) * vRef)
         except:
             corrected = -1
         return round(corrected, 2)
