@@ -1,8 +1,8 @@
 <?php
     try {
-        $Target = strtolower($_GET['set']);
-        $Mode = strtolower($_GET['mode']);
-        if ($Mode == 'a') {
+        $Target = strtoupper($_GET['set']);
+        $Mode = intval($_GET['mode']);
+        if ($Mode == 1) {
             $Value = floatval($_GET['value']);
         } else {
             $Value = intval($_GET['value']);

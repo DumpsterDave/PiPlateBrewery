@@ -41,49 +41,49 @@
             <div id="HltHsContainer" class="TempOk">
                 <table width="384" border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td class="Label">HLT</td><td id="HltHsTemp" class="Temp"><?php echo round($Data->{'HltHsTemp'}, 1); ?>&#8451;</td>
+                        <td class="Label">HLT</td><td id="HltHsTemp" class="Temp"><?php echo round($Data->{'HLT'}->{'HsTemp'}, 1); ?>&#8451;</td>
                     </tr>
                 </table>
             </div>
             <div id="EncContainer" class="TempWarn">
                 <table width="384" border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td class="Label">CPU</td><td id="EncTemp" class="Temp"><?php echo round($Data->{'CpuTemp'}, 1); ?>&#8451;</td>
+                        <td class="Label">CPU</td><td id="EncTemp" class="Temp"><?php echo round($Data->{'CPU'}->{'HsTemp'}, 1); ?>&#8451;</td>
                     </tr>
                 </table>
             </div>
             <div id="BkHsContainer" class="TempHigh">
                 <table width="384" border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td class="Label">BK</td><td id="BkHsTemp" class="Temp"><?php echo round($Data->{'BkHsTemp'}, 1); ?>&#8451;</td>
+                        <td class="Label">BK</td><td id="BkHsTemp" class="Temp"><?php echo round($Data->{'BK'}->{'HsTemp'}, 1); ?>&#8451;</td>
                     </tr>
                 </table>
             </div>
             <div id="HltContainer">
             <div id="HltTemp" class="TempLow" onClick="ShowSetTarget('hlt');">
                     <div class="TunLabel">Sv:&nbsp;&nbsp;</div>
-                    <span class="TunTemp" id="HltTempSet"><?php echo round($Data->{'HltAuto'}, 1); ?>&#8457;</span>
+                    <span class="TunTemp" id="HltTempSet"><?php echo round($Data->{'HLT'}->{'sv'}, 1); ?>&#8457;</span>
                     <div class="TunLabel">Pv:&nbsp;&nbsp;</div>
-                    <span class="TunTemp" id="HltTempValue"><?php echo round($Data->{'HltTemp'}, 1); ?>&#8457;</span>
+                    <span class="TunTemp" id="HltTempValue"><?php echo round($Data->{'HLT'}->{'pv'}, 1); ?>&#8457;</span>
                 </div>
-                <a id="HltModeLink" href="#" onClick="ChangeMode('hlt','M');"><div id="HltMode" class="ModeAuto">AUTO</div></a>
+                <a id="HltModeLink" href="#" onClick="ChangeMode('HLT','0');"><div id="HltMode" class="ModeAuto">AUTO</div></a>
             </div>
             <div id="MtContainer">
                 <div id="MtTemp" class="TempOk" onClick="ShowSetTarget('mt');">
                     <div class="TunLabel">Sv:&nbsp;&nbsp;</div>
-                    <span class="TunTemp" id="MtTempSet"><?php echo round($Data->{'MtAuto'}, 1); ?>&#8457;</span>
+                    <span class="TunTemp" id="MtTempSet"><?php echo round($Data->{'MT'}->{'sv'}, 1); ?>&#8457;</span>
                     <div class="TunLabel">Pv:&nbsp;&nbsp;</div>
-                    <span class="TunTemp" id="MtTempValue"><?php echo round($Data->{'MtTemp'}, 1); ?>&#8457;</span>
+                    <span class="TunTemp" id="MtTempValue"><?php echo round($Data->{'MT'}->{'pv'}, 1); ?>&#8457;</span>
                 </div>
             </div>
             <div id="BkContainer">
                 <div id="BkTemp" class="TempHigh" onClick="ShowSetTarget('bk');">
                     <div class="TunLabel">Sv:&nbsp;&nbsp;</div>
-                    <span class="TunTemp" id="BkTempSet"><?php echo round($Data->{'BkMan'}, 1); ?>&#8457;</span>
+                    <span class="TunTemp" id="BkTempSet"><?php echo round($Data->{'BK'}->{'sv'}, 1); ?>&#8457;</span>
                     <div class="TunLabel">Pv:&nbsp;&nbsp;</div>
-                    <span class="TunTemp" id="BkTempValue"><?php echo round($Data->{'BkTemp'}, 1); ?>&#8457;</span>
+                    <span class="TunTemp" id="BkTempValue"><?php echo round($Data->{'BK'}->{'pv'}, 1); ?>&#8457;</span>
                 </div>
-                <a id="BkModeLink" href="#" onClick="ChangeMode('bk','A');"><div id="BkMode" class="ModeMan">MAN</div></a>
+                <a id="BkModeLink" href="#" onClick="ChangeMode('BK','1');"><div id="BkMode" class="ModeMan">MAN</div></a>
             </div>
             <div id="Runtime"><b>Runtime:&nbsp;&nbsp;</b><span id="TimeElapsed">00:00:00</span></div>
             <div id="Refresh" onClick="window.location.reload(true);"><img src="img/refresh.png"/></div>

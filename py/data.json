@@ -1,22 +1,38 @@
 {
-    "MtAuto": 150,
-    "HltAuto": 151,
-    "BkStatus": 0,
-    "BkMode": "M",
-    "HltStatus": 0,
-    "HltHsTemp": 24.86,
-    "BkAuto": 212,
-    "MtTemp": 68.675,
-    "HltDelta": 1,
-    "BkTemp": 68.225,
-    "MtDelta": 1,
-    "HltMan": 50,
-    "BkMan": 40,
-    "CpuTemp": 53.069,
-    "BkHsTemp": 25.6,
-    "HltCycle": 10,
-    "BkCycle": 10,
-    "HltTemp": 67.55,
-    "HltMode": "A",
-    "BkDelta": 1
+    "HLT": {
+        "sv": 150.0,
+        "pv": 68.5,
+        "kp": 1.0,
+        "ki": 0.0,
+        "kd": 0.0,
+        "ITerm": 0.0,
+        "Output": 100.0,
+        "Manual": 50.0,
+        "Mode": 1,
+        "Status": 0,
+        "HsTemp": 25.0,
+        "Delta": 1.0
+    },
+    "MT": {
+        "sv": 151.0,
+        "pv": 69.5,
+        "Delta": 1.0
+    },
+    "BK": {
+        "sv": 152.0,
+        "pv": 70.5,
+        "kp": 1.0,
+        "ki": 0.0,
+        "kd": 0.0,
+        "ITerm": 0.0,
+        "Output": 50,
+        "Manual": 50.0,
+        "Mode": 0,
+        "Status": 0,
+        "HsTemp": 24.0,
+        "Delta": 1.0
+    },
+    "CPU": {
+        "HsTemp": 61.0
+    }
 }

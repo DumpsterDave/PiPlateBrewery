@@ -1,6 +1,6 @@
 <?php
     try {
-        $Target = strtolower($_GET['set']);
+        $Target = strtoupper($_GET['set']);
         $Arr = array("Target"=>$Target, "NewMode"=>$_GET['mode']);
         file_put_contents('./py/mode.json', json_encode($Arr));
     } catch (Exception $ex) {

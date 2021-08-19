@@ -4,13 +4,13 @@ var CPU = 0;
 var BKHeatsink = 0;
 var HLTSv = 0;
 var HLTPv = 0;
-var HLTMode = 'A';
+var HLTMode = 1;
 var MTSv = 0;
 var MTPv = 0;
 var BKSv = 0;
 var BKPv = 0;
-var BKMode = 'A';
-var InputMode = 'A';
+var BKMode = 0;
+var InputMode = 1;
 var HltCycle, BkCycle;
 var HltDelta, MtDelta, BkDelta;
 var TcPID, LaPID;
@@ -36,16 +36,16 @@ function RefreshElements() {
             BkCycle = Values["BkCycle"];
 
             //Process Deltas
-            HltDelta = Values["HltDelta"];
-            MtDelta = Values["MtDelta"];
-            BkDelta = Values["BkDelta"];
+            HltDelta = Values["HLT"]['Delta'];
+            MtDelta = Values["MT"]['Delta'];
+            BkDelta = Values["BK"]['Delta'];
 
             //Process PIDs
             TcPID = Values["TcPID"];
             LaPID = Values["LaPID"];
 
             //Process HLT Heatsink (Celcius)
-            HLTHeatsink = Values["HltHsTemp"];
+            HLTHeatsink = Values["HLT"]['HsTemp'];
             if (HLTHeatsink >= 80) {
                 tempState = "TempHigh";
             } else if (HLTHeatsink >= 70) {
@@ -56,7 +56,7 @@ function RefreshElements() {
 
             //Process CPU Temp (Celcius)
             tempState = "TempOk";
-            CPU = Values["CpuTemp"];
+            CPU = Values["CPU"]['HsTemp'];
             if (CPU >= 75) {
                 tempState = "TempHigh";
             } else if (CPU >= 65) {
@@ -67,7 +67,7 @@ function RefreshElements() {
 
             //Process BK Heatsink (Celcius)
             tempState = "TempOk";
-            BKHeatsink = Values["BkHsTemp"];
+            BKHeatsink = Values["BK"]['HsTemp'];
             if (BKHeatsink >= 80) {
                 tempState = "TempHigh";
             } else if (BKHeatsink >= 70) {
@@ -78,10 +78,10 @@ function RefreshElements() {
 
             //Process HLT Temp
             tempState = "TempOk";
-            HLTPv = Values["HltTemp"];
-            if (Values["HltMode"] == 'A') {
-                HltMode = 'A';
-                HLTSv = Values["HltAuto"];
+            HLTPv = Values["HLT"]['pv'];
+            if (Values["HLT"]['Mode'] == 1) {
+                HltMode = 1;
+                HLTSv = Values["HLT"]['pv'];
                 if (HLTPv < (HLTSv - HltDelta)) {
                     tempState = "TempLow";
                 } else if (HLTPv > (HLTSv + HltDelta)) {
@@ -90,23 +90,23 @@ function RefreshElements() {
                 document.getElementById("HltTempSet").innerHTML = HLTSv.toFixed(1) + "&#8457;";
                 document.getElementById("HltMode").className = "ModeAuto";
                 document.getElementById("HltMode").innerHTML = "AUTO";
-                document.getElementById("HltModeLink").onclick = function(){ChangeMode('hlt','M');}
+                document.getElementById("HltModeLink").onclick = function(){ChangeMode('hlt',0);}
             } else {
-                HltMode = 'M';
-                HLTSv = Values["HltMan"];
+                HltMode = 0;
+                HLTSv = Values["HLT"]['Manual'];
                 tempState = "TempMan";
                 document.getElementById("HltTempSet").innerHTML = HLTSv.toFixed(0) + "%";
                 document.getElementById("HltMode").className = "ModeMan";
                 document.getElementById("HltMode").innerHTML = "MAN";
-                document.getElementById("HltModeLink").onclick = function(){ChangeMode('hlt','A');}
+                document.getElementById("HltModeLink").onclick = function(){ChangeMode('hlt',1);}
             }
             document.getElementById("HltTempValue").innerHTML = HLTPv.toFixed(1) + "&#8457;";
             document.getElementById("HltTemp").className = tempState;
 
             //Process Mash Temp
             tempState = "TempOk";
-            MTPv = Values["MtTemp"];
-            MTSv = Values["MtAuto"];
+            MTPv = Values["MT"]['pv'];
+            MTSv = Values["MT"]['sv'];
             if (MTPv < (MTSv - MtDelta)) {
                 tempState = "TempLow";
             } else if (MTPv > (MTSv + MtDelta)) {
@@ -118,10 +118,10 @@ function RefreshElements() {
 
             //Process BK Temp
             tempState = "TempOk";
-            BKPv = Values["BkTemp"];
-            if (Values["BkMode"] == 'A') {
-                BKMode = 'A';
-                BKSv = Values["BkAuto"];
+            BKPv = Values["BK"]['pv'];
+            if (Values["BK"]['Mode'] == 1) {
+                BKMode = 1;
+                BKSv = Values["BK"]['sv'];
                 if (BKPv < (BKSv - BkDelta)) {
                     tempState = "TempLow";
                 } else if (BKPv > (BKSv + BkDelta)) {
@@ -130,15 +130,15 @@ function RefreshElements() {
                 document.getElementById("BkTempSet").innerHTML = BKSv.toFixed(1) + "&#8457;";
                 document.getElementById("BkMode").className = "ModeAuto";
                 document.getElementById("BkMode").innerHTML = "AUTO";
-                document.getElementById("BkModeLink").onclick = function(){ChangeMode('bk','M');}
+                document.getElementById("BkModeLink").onclick = function(){ChangeMode('bk',0);}
             } else {
-                BKMode = 'M';
-                BKSv = Values["BkMan"];
+                BKMode = 0;
+                BKSv = Values["BK"]['Manual'];
                 tempState = "TempMan";
                 document.getElementById("BkTempSet").innerHTML = BKSv.toFixed(0) + "%";
                 document.getElementById("BkMode").className = "ModeMan";
                 document.getElementById("BkMode").innerHTML = "MAN";
-                document.getElementById("BkModeLink").onclick = function(){ChangeMode('bk','A');}
+                document.getElementById("BkModeLink").onclick = function(){ChangeMode('bk',1);}
             }
             document.getElementById("BkTempValue").innerHTML = BKPv.toFixed(1) + "&#8457;";
             document.getElementById("BkTemp").className = tempState;       
@@ -162,11 +162,11 @@ function RefreshElements() {
 }
 
 function ChangeMode(target, mode) {
-    if ((target !== 'hlt') && (target !== "bk")) {
+    if ((target !== 'HLT') && (target !== "BK")) {
         return;
     }
-    if ((mode !=="A") && (mode !== "M")) {
-        return
+    if (mode > 1 || mode < 0) {
+        return;
     }
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", "setmode.php?set=" + target + "&mode=" + mode);
@@ -176,7 +176,7 @@ function ChangeMode(target, mode) {
 function SetButtonClick(button) {
     var Temp = document.getElementById("SetTargetValueNew").innerHTML.replace(/\./g, '');
     var MaxL = 0;
-    if (InputMode == "A") {
+    if (InputMode == 1) {
         MaxL = 4;
     } else {
         MaxL = 3
@@ -195,7 +195,7 @@ function SetButtonClick(button) {
     }
 
     if (Temp.length !== 0) {
-        if (InputMode == 'A') {
+        if (InputMode == 1) {
                 document.getElementById("SetTargetValueNew").innerHTML = (parseFloat(Temp) / 10).toFixed(1);
         } else {
             var t = parseInt(Temp);
@@ -230,7 +230,7 @@ function ShowSetTarget(caller) {
             ClearNewTarget();
             document.getElementById("SetTargetValueCurrent").innerHTML = MTSv;
             document.getElementById("SetTargetCaller").value = caller;
-            InputMode = "A";
+            InputMode = 1;
             break;
         case "bk":
             ClearNewTarget();
