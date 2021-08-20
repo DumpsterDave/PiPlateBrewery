@@ -124,9 +124,11 @@ try:
             f.close()
             Data[NewData['Target']]['Mode'] = NewData['NewMode']
             if NewData['Target'] == 'HLT':
-                HltPid.SetMode(NewData['NewMode'], Data['HLT']['Manual'])
+                newOut = (Data['HLT']['Manual'] / 100) * MAINFREQ
+                HltPid.SetMode(NewData['NewMode'], newOut)
             else:
-                BkPid.SetMode(NewData['NewMode'], Data['BK']['Manual'])
+                newOut = (Data['BK']['Manual'] / 100) * MAINFREQ
+                BkPid.SetMode(NewData['NewMode'], newOut)
             os.remove('/var/www/html/py/mode.json')
 
             #Temp

@@ -66,7 +66,7 @@
                     <div class="TunLabel">Pv:&nbsp;&nbsp;</div>
                     <span class="TunTemp" id="HltTempValue"><?php echo round($Data->{'HLT'}->{'pv'}, 1); ?>&#8457;</span>
                 </div>
-                <a id="HltModeLink" href="#" onClick="ChangeMode('HLT','0');"><div id="HltMode" class="ModeAuto">AUTO</div></a>
+                <a id="HltModeLink" href="#" onClick="ChangeMode('HLT',0);"><div id="HltMode" class="ModeAuto">AUTO</div></a>
             </div>
             <div id="MtContainer">
                 <div id="MtTemp" class="TempOk" onClick="ShowSetTarget('mt');">
@@ -83,7 +83,15 @@
                     <div class="TunLabel">Pv:&nbsp;&nbsp;</div>
                     <span class="TunTemp" id="BkTempValue"><?php echo round($Data->{'BK'}->{'pv'}, 1); ?>&#8457;</span>
                 </div>
-                <a id="BkModeLink" href="#" onClick="ChangeMode('BK','1');"><div id="BkMode" class="ModeMan">MAN</div></a>
+                <a id="BkModeLink" href="#" onClick="ChangeMode('BK',1);"><div id="BkMode" class="ModeMan">MAN</div></a>
+            </div>
+            <div class="PidOutputContainer" id="HltPidOutput">
+                <div class="PidOutputBar" id="HltPidOutputBar"></div>
+                <div class="PidOutputValue" id="HltPidOutputValue">50</div>
+            </div>
+            <div class="PidOutputContainer" id="BkPidOutput">
+                <div class="PidOutputBar" id="BkPidOutputBar"></div>
+                <div class="PidOutputValue" id="BkPidOutputValue">50</div>
             </div>
             <div id="Runtime"><b>Runtime:&nbsp;&nbsp;</b><span id="TimeElapsed">00:00:00</span></div>
             <div id="Refresh" onClick="window.location.reload(true);"><img src="img/refresh.png"/></div>

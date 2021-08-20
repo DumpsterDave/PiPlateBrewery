@@ -81,7 +81,7 @@ function RefreshElements() {
             HLTPv = Values["HLT"]['pv'];
             if (Values["HLT"]['Mode'] == 1) {
                 HltMode = 1;
-                HLTSv = Values["HLT"]['pv'];
+                HLTSv = Values["HLT"]['sv'];
                 if (HLTPv < (HLTSv - HltDelta)) {
                     tempState = "TempLow";
                 } else if (HLTPv > (HLTSv + HltDelta)) {
@@ -90,7 +90,7 @@ function RefreshElements() {
                 document.getElementById("HltTempSet").innerHTML = HLTSv.toFixed(1) + "&#8457;";
                 document.getElementById("HltMode").className = "ModeAuto";
                 document.getElementById("HltMode").innerHTML = "AUTO";
-                document.getElementById("HltModeLink").onclick = function(){ChangeMode('hlt',0);}
+                document.getElementById("HltModeLink").onclick = function(){ChangeMode('HLT',0);};
             } else {
                 HltMode = 0;
                 HLTSv = Values["HLT"]['Manual'];
@@ -98,7 +98,7 @@ function RefreshElements() {
                 document.getElementById("HltTempSet").innerHTML = HLTSv.toFixed(0) + "%";
                 document.getElementById("HltMode").className = "ModeMan";
                 document.getElementById("HltMode").innerHTML = "MAN";
-                document.getElementById("HltModeLink").onclick = function(){ChangeMode('hlt',1);}
+                document.getElementById("HltModeLink").onclick = function(){ChangeMode('HLT',1);};
             }
             document.getElementById("HltTempValue").innerHTML = HLTPv.toFixed(1) + "&#8457;";
             document.getElementById("HltTemp").className = tempState;
@@ -130,7 +130,7 @@ function RefreshElements() {
                 document.getElementById("BkTempSet").innerHTML = BKSv.toFixed(1) + "&#8457;";
                 document.getElementById("BkMode").className = "ModeAuto";
                 document.getElementById("BkMode").innerHTML = "AUTO";
-                document.getElementById("BkModeLink").onclick = function(){ChangeMode('bk',0);}
+                document.getElementById("BkModeLink").onclick = function(){ChangeMode('BK',0);};
             } else {
                 BKMode = 0;
                 BKSv = Values["BK"]['Manual'];
@@ -138,10 +138,18 @@ function RefreshElements() {
                 document.getElementById("BkTempSet").innerHTML = BKSv.toFixed(0) + "%";
                 document.getElementById("BkMode").className = "ModeMan";
                 document.getElementById("BkMode").innerHTML = "MAN";
-                document.getElementById("BkModeLink").onclick = function(){ChangeMode('bk',1);}
+                document.getElementById("BkModeLink").onclick = function(){ChangeMode('BK',1);};
             }
             document.getElementById("BkTempValue").innerHTML = BKPv.toFixed(1) + "&#8457;";
             document.getElementById("BkTemp").className = tempState;       
+
+            //Process HLT Output
+            document.getElementById('HltPidOutputBar').style.width = ((Values['HLT']['Output'] / 60) * 384) + 'px';
+            document.getElementById('HltPidOutputValue').innerHTML = ((Values['HLT']['Output'] / 60) * 100).toFixed(0) + '%';
+
+            //Process BK Output
+            document.getElementById('BkPidOutputBar').style.width = ((Values['BK']['Output'] / 60) * 384) + 'px';
+            document.getElementById('BkPidOutputValue').innerHTML = ((Values['BK']['Output'] / 60) * 100).toFixed(0) + '%';
         }
         document.getElementById('tcpid').value = TcPID;
         if ((TcPID !== null) && (TcPID > 0)) {
@@ -168,6 +176,7 @@ function ChangeMode(target, mode) {
     if (mode > 1 || mode < 0) {
         return;
     }
+    alert("Target: " + target + "  Mode: " + mode);
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", "setmode.php?set=" + target + "&mode=" + mode);
     xhttp.send();

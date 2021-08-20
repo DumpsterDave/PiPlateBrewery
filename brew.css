@@ -179,6 +179,34 @@ a {
     cursor: pointer;
 }
 
+.PidOutputContainer {
+    position: absolute;
+    display: inline-block;
+    width: 384px;
+    height: 32px;
+    border: solid 1px #ffffff;
+    border-radius: 8px;
+}
+
+.PidOutputBar {
+    background-color: #ffaec988;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 32px;
+    border-radius: 8px;
+}
+
+.PidOutputValue {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 384px;
+    height: 32px;
+    text-align: center;
+    font-size: 22px;
+}
+
 #Main{
     position: relative;
     background-color: #333333;
@@ -291,6 +319,25 @@ a {
     font-size: 96px;
     cursor: pointer;
 }
+
+#HltPidOutput {
+    left: 32px;
+    top: 656px;
+}
+
+#HltPidOutputBar {
+    width: 384px;
+}
+
+#BkPidOutput {
+    left: 864px;
+    top: 656px;
+}
+
+#BkPidOutputBar {
+    width: 384px;
+}
+
 
 #Runtime {
     position: absolute;
