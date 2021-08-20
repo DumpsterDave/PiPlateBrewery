@@ -4,6 +4,7 @@ import piplates.THERMOplate as THERMO
 import piplates.DAQC2plate as DAQC2
 from gpiozero import CPUTemperature
 from datetime import datetime
+import math
 import time
 import json
 import os
@@ -30,11 +31,19 @@ try:
     #Set our Start Time and next triggers for our SSRs
     startTime = round(time.time(), 1)
     #Set Cycle Length
-    CycleLength = 1 / MAINFREQ
+    CycleLength = MAINFREQ * math.ceil(Data['Global']['Cycle'])
 
     #Turn on Heatsink Fans
     DAQC2.setDOUTbit(DAQCPLATEADDR, 2)
     DAQC2.setDOUTbit(DAQCPLATEADDR, 3)
+
+    #Set PID Values
+    HltPid.kP = Data['HLT']['kp']
+    HltPid.kI = Data['HLT']['ki']
+    HltPid.kD = Data['HLT']['kd']
+    BkPid.kP = Data['BK']['kp']
+    BkPid.kI = Data['BK']['ki']
+    BkPid.kD = Data['BK']['kd']
 
     def GetHeatsink(channel):
         global DAQCPLATEADDR
@@ -101,14 +110,14 @@ try:
         
         #Get PID Data
         Data['HLT']['Output'] = HltPid.Output
-        Data['HLT']['kp'] = HltPid.kD
+        Data['HLT']['kp'] = HltPid.kP
         Data['HLT']['ki'] = HltPid.kI
-        Data['HLT']['kd'] = HltPid.kP
+        Data['HLT']['kd'] = HltPid.kD
         Data['HLT']['ITerm'] = HltPid.ITerm
         Data['BK']['Output'] = BkPid.Output
-        Data['BK']['kp'] = BkPid.kD
+        Data['BK']['kp'] = BkPid.kP
         Data['BK']['ki'] = BkPid.kI
-        Data['BK']['kd'] = BkPid.kP
+        Data['BK']['kd'] = BkPid.kD
         Data['BK']['ITerm'] = BkPid.ITerm
 
         #Update Uptime File
@@ -136,8 +145,14 @@ try:
             f = open('/var/www/html/py/temp.json', 'r')
             NewData = json.load(f)
             f.close()
+            
             if NewData['Mode'] == 0:
                 Data[NewData['Target']]['Manual'] = NewData['Value']
+                newOut = (NewData['Value'] / 100) * MAINFREQ
+                if NewData['Target'] == 'HLT':
+                    HltPid.SetMode(0, newOut)
+                else:
+                    BkPid.SetMode(0, newOut)
             else:
                 Data[NewData['Target']]['sv'] = NewData['Value']
             os.remove('/var/www/html/py/temp.json')
@@ -167,25 +182,32 @@ try:
         HltPid.Compute(Data['HLT']['pv'])
         BkPid.Compute(Data['BK']['pv'])
 
-        for i in range(1, MAINFREQ):
+        HltOff = math.ceil(HltPid.Output * Data['Global']['Cycle'])
+        BkOff = math.ceil(BkPid.Output * Data['Global']['Cycle'])
+
+        for i in range(1, CycleLength):
             #Turn SSRs On if off and enabled
             if i == 1:
                 if HltPid.Output > 0 and Data['HLT']['Status'] == 0:
                     TurnHLTOn()
-                if BkPid.Output > 0 and Data['HLT']['Status'] == 0:
+                if BkPid.Output > 0 and Data['BK']['Status'] == 0:
                     TurnBKOn()
 
-            if HltPid.Output == i:
+            if HltOff == i:
                 TurnHLTOff()
 
-            if BkPid.Output == i:
+            if BkOff == i:
                 TurnBKOff()
 
-            time.sleep(1 / MAINFREQ)            
+            if i % MAINFREQ == 0:
+                UpdateData()
+
+            time.sleep(1 / MAINFREQ)     
+       
 
         #Save Data
         f = open('/var/www/html/py/data.json', 'w')
-        json.dump(data, f)
+        json.dump(Data, f)
         f.close()
 
 except KeyboardInterrupt:

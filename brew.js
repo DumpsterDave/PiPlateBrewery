@@ -80,7 +80,7 @@ function RefreshElements() {
             tempState = "TempOk";
             HLTPv = Values["HLT"]['pv'];
             if (Values["HLT"]['Mode'] == 1) {
-                HltMode = 1;
+                HLTMode = 1;
                 HLTSv = Values["HLT"]['sv'];
                 if (HLTPv < (HLTSv - HltDelta)) {
                     tempState = "TempLow";
@@ -92,7 +92,7 @@ function RefreshElements() {
                 document.getElementById("HltMode").innerHTML = "AUTO";
                 document.getElementById("HltModeLink").onclick = function(){ChangeMode('HLT',0);};
             } else {
-                HltMode = 0;
+                HLTMode = 0;
                 HLTSv = Values["HLT"]['Manual'];
                 tempState = "TempMan";
                 document.getElementById("HltTempSet").innerHTML = HLTSv.toFixed(0) + "%";
@@ -176,7 +176,6 @@ function ChangeMode(target, mode) {
     if (mode > 1 || mode < 0) {
         return;
     }
-    alert("Target: " + target + "  Mode: " + mode);
     var xhttp = new XMLHttpRequest();
     xhttp.open("GET", "setmode.php?set=" + target + "&mode=" + mode);
     xhttp.send();

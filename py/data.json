@@ -1,38 +1,41 @@
 {
     "HLT": {
-        "sv": 150.0,
-        "pv": 68.5,
-        "kp": 1.0,
-        "ki": 0.0,
-        "kd": 0.0,
-        "ITerm": 0.0,
-        "Output": 60.0,
-        "Manual": 50.0,
-        "Mode": 1,
-        "Status": 0,
-        "HsTemp": 25.0,
-        "Delta": 1.0
-    },
-    "MT": {
-        "sv": 151.0,
-        "pv": 69.5,
-        "Delta": 1.0
-    },
-    "BK": {
-        "sv": 152.0,
-        "pv": 70.5,
-        "kp": 1.0,
-        "ki": 0.0,
-        "kd": 0.0,
-        "ITerm": 0.0,
-        "Output": 30,
-        "Manual": 50.0,
+        "sv": 60,
+        "pv": 68.113,
+        "kp": 1,
+        "ki": 3,
+        "kd": 0.2,
+        "ITerm": 0,
+        "Output": 22,
+        "Manual": 50,
         "Mode": 0,
         "Status": 0,
-        "HsTemp": 24.0,
-        "Delta": 1.0
+        "HsTemp": 26.02,
+        "Delta": 1
+    },
+    "MT": {
+        "sv": 151,
+        "pv": 69.013,
+        "Delta": 1
+    },
+    "BK": {
+        "sv": 100,
+        "pv": 103.888,
+        "kp": 1,
+        "ki": 3,
+        "kd": 0.2,
+        "ITerm": 0,
+        "Output": 0,
+        "Manual": 40,
+        "Mode": 1,
+        "Status": 0,
+        "HsTemp": 26.02,
+        "Delta": 1
     },
     "CPU": {
-        "HsTemp": 61.0
+        "HsTemp": 54.043
+    },
+    "Global": {
+        "Cycle": 5
     }
 }

@@ -5,7 +5,7 @@
         if ($Mode == 1) {
             $Value = floatval($_GET['value']);
         } else {
-            $Value = intval((floatval($_GET['value']) / 100) * 60);
+            $Value = intval($_GET['value']);
         }
         $Arr = array("Target"=>$Target, "Mode"=>$Mode, "Value"=>$Value);
         file_put_contents('./py/temp.json', json_encode($Arr));

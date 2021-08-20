@@ -9,8 +9,8 @@ class PID(object):
     SetPoint = 0.0
     ITerm = 0.0
     kP = 1.0
-    kI = 0.0
-    kD = 0.0
+    kI = 3.0
+    kD = 0.2
     SampleTime = 1
     OutMin = 0
     OutMax = 60
@@ -18,8 +18,8 @@ class PID(object):
 
     def __init__(self):
         self.kP = 1.0
-        self.kI = 0.0
-        self.kD = 0.0
+        self.kI = 3.0
+        self.kD = 0.2
         self.SetPoint = 1.0
         self.SampleTime = 1
         self.OutMin = 0
@@ -58,10 +58,9 @@ class PID(object):
         self.SetPoint = sv
 
     def SetTunings(self, Kp, Ki, Kd):
-        SampleTimeInSec = self.SampleTime / 1000
         self.kP = Kp
-        self.kI = Ki * SampleTimeInSec
-        self.kD = Kd / SampleTimeInSec
+        self.kI = Ki * self.SampleTime
+        self.kD = Kd / self.SampleTime
 
     def SetOutputLimits(self, Min, Max):
         if (Min > Max):
@@ -85,15 +84,3 @@ class PID(object):
         self.LastInput = self.Input
         self.ITerm = self.Output
         self.ITerm = self.Clamp(self.ITerm)
-
-pid = PID()
-pid.SetTarget(168)
-pid.kD = 0.2
-pid.kP = 1.0
-pid.kI = 2.0
-
-for i in range(50,70):
-    temp = 110 + i
-    pid.Compute(temp)
-    print("loop: {}    pidOutput: {}    pidInput: {}".format(i, pid.Output, pid.Input))
-    time.sleep(1)
