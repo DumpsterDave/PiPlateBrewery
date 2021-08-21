@@ -18,8 +18,6 @@ try:
     THERMOPLATEADDR=0  #THERMOPlate Address
     DAQCPLATEADDR=1  #DAQC2Plate Address
     MAINFREQ = 60 #Frequency of Main Power feed (50/60Hz)
-    HltPid = pid.PID()
-    BkPid = pid.PID()
     
     #Initial Data Load
     f = open('/var/www/html/py/data.json', 'r')
@@ -33,17 +31,13 @@ try:
     #Set Cycle Length
     CycleLength = MAINFREQ * math.ceil(Data['Global']['Cycle'])
 
+    #Setup PID Controllers
+    HltPid = pid.PID(Data['HLT']['Kp'], Data['HLT']['Ki'], Data['HLT']['Kd'], CycleLength, MAINFREQ, 1)
+    BkPid = pid.PID(Data['BK']['Kp'], Data['BK']['Ki'], Data['BK']['Kd'], CycleLength, MAINFREQ, 1)
+
     #Turn on Heatsink Fans
     DAQC2.setDOUTbit(DAQCPLATEADDR, 2)
     DAQC2.setDOUTbit(DAQCPLATEADDR, 3)
-
-    #Set PID Values
-    HltPid.kP = Data['HLT']['kp']
-    HltPid.kI = Data['HLT']['ki']
-    HltPid.kD = Data['HLT']['kd']
-    BkPid.kP = Data['BK']['kp']
-    BkPid.kI = Data['BK']['ki']
-    BkPid.kD = Data['BK']['kd']
 
     def GetHeatsink(channel):
         global DAQCPLATEADDR
@@ -104,21 +98,21 @@ try:
         Data['HLT']['HsTemp'] = GetHeatsink(0)
         Data['CPU']['HsTemp'] = GetCPU()
         Data['BK']['HsTemp'] = GetHeatsink(1)
-        Data['HLT']['pv'] = THERMO.getTEMP(0,11)
-        Data['MT']['pv'] = THERMO.getTEMP(0,10)
-        Data['BK']['pv'] = THERMO.getTEMP(0,9)
+        Data['HLT']['Pv'] = THERMO.getTEMP(0,11)
+        Data['MT']['Pv'] = THERMO.getTEMP(0,10)
+        Data['BK']['Pv'] = THERMO.getTEMP(0,9)
         
         #Get PID Data
         Data['HLT']['Output'] = HltPid.Output
-        Data['HLT']['kp'] = HltPid.kP
-        Data['HLT']['ki'] = HltPid.kI
-        Data['HLT']['kd'] = HltPid.kD
-        Data['HLT']['ITerm'] = HltPid.ITerm
+        Data['HLT']['Kp'] = HltPid.Kp
+        Data['HLT']['Ki'] = HltPid.Ki
+        Data['HLT']['Kd'] = HltPid.Kd
+        #Data['HLT']['ITerm'] = HltPid.ITerm
         Data['BK']['Output'] = BkPid.Output
-        Data['BK']['kp'] = BkPid.kP
-        Data['BK']['ki'] = BkPid.kI
-        Data['BK']['kd'] = BkPid.kD
-        Data['BK']['ITerm'] = BkPid.ITerm
+        Data['BK']['Kp'] = BkPid.Kp
+        Data['BK']['Ki'] = BkPid.Ki
+        Data['BK']['Kd'] = BkPid.Kd
+        #Data['BK']['ITerm'] = BkPid.ITerm
 
         #Update Uptime File
         f = open('/var/www/html/py/uptime', 'w')
@@ -133,10 +127,10 @@ try:
             f.close()
             Data[NewData['Target']]['Mode'] = NewData['NewMode']
             if NewData['Target'] == 'HLT':
-                newOut = (Data['HLT']['Manual'] / 100) * MAINFREQ
+                newOut = (Data['HLT']['Manual'] / 100) * MAINFREQ * CycleLength
                 HltPid.SetMode(NewData['NewMode'], newOut)
             else:
-                newOut = (Data['BK']['Manual'] / 100) * MAINFREQ
+                newOut = (Data['BK']['Manual'] / 100) * MAINFREQ * CycleLength
                 BkPid.SetMode(NewData['NewMode'], newOut)
             os.remove('/var/www/html/py/mode.json')
 
@@ -148,13 +142,13 @@ try:
             
             if NewData['Mode'] == 0:
                 Data[NewData['Target']]['Manual'] = NewData['Value']
-                newOut = (NewData['Value'] / 100) * MAINFREQ
+                newOut = (NewData['Value'] / 100) * MAINFREQ * CycleLength
                 if NewData['Target'] == 'HLT':
                     HltPid.SetMode(0, newOut)
                 else:
                     BkPid.SetMode(0, newOut)
             else:
-                Data[NewData['Target']]['sv'] = NewData['Value']
+                Data[NewData['Target']]['Sv'] = NewData['Value']
             os.remove('/var/www/html/py/temp.json')
 
             #Settings
@@ -167,8 +161,8 @@ try:
             Data['BK']['Delta'] = NewData['BK']['Delta']
             os.remove('/var/www/html/py/settings.json')
 
-        HltPid.SetTarget(Data['HLT']['sv'])
-        BkPid.SetTarget(Data['BK']['sv'])
+        HltPid.SetTarget(Data['HLT']['Sv'])
+        BkPid.SetTarget(Data['BK']['Sv'])
         #Save Data
         f = open('/var/www/html/py/data.json', 'w')
         json.dump(Data, f)
@@ -179,11 +173,11 @@ try:
 
     while run:
         UpdateData()
-        HltPid.Compute(Data['HLT']['pv'])
-        BkPid.Compute(Data['BK']['pv'])
+        HltPid.Compute(Data['HLT']['Pv'])
+        BkPid.Compute(Data['BK']['Pv'])
 
-        HltOff = math.ceil(HltPid.Output * Data['Global']['Cycle'])
-        BkOff = math.ceil(BkPid.Output * Data['Global']['Cycle'])
+        #HltOff = math.ceil(HltPid.Output * Data['Global']['Cycle'])
+        #BkOff = math.ceil(BkPid.Output * Data['Global']['Cycle'])
 
         for i in range(1, CycleLength):
             #Turn SSRs On if off and enabled
@@ -193,10 +187,10 @@ try:
                 if BkPid.Output > 0 and Data['BK']['Status'] == 0:
                     TurnBKOn()
 
-            if HltOff == i:
+            if HltPid.Output == i:
                 TurnHLTOff()
 
-            if BkOff == i:
+            if BkPid.Output == i:
                 TurnBKOff()
 
             if i % MAINFREQ == 0:
