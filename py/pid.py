@@ -53,7 +53,7 @@ class PID(object):
     def SetTarget(self, Sv):
         self.Sv = Sv
 
-    def SetTunings(self, Kpk, Ki, Kd):
+    def SetTunings(self, Kp, Ki, Kd):
         self.Kp = Kp
         self.Ki = Ki
         self.Kd = Kd
