@@ -5,16 +5,16 @@ import time
 
 class PID(object):
 
-    def __init__(self, P, I, D, cycleLen, mainFreq, sampleFreq):
+    def __init__(self, P, I, D, CycleLen, MainFreq, SampleFreq):
         self.Kp = P
         self.Ki = I
         self.Kd = D
         self.Sv = 0.0
         self.Pv = 0.0
-        self.SampleTime = sampleFreq
+        self.SampleTime = SampleFreq
         self.LastTime = 0
         self.OutMin = 0
-        self.OutMax = math.ceil(cycleLen * mainFreq)
+        self.OutMax = math.ceil(CycleLen * MainFreq)
         self.Output = 0
         self.Mode = 1
 
