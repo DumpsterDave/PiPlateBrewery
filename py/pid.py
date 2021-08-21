@@ -1,33 +1,22 @@
+from collections import deque
 import math
-from os import error
 import time
 
-class PID(object):
-    LastTime = None
-    LastInput = None
-    LastError = 0
-    Input = 0.0
-    Output = 0
-    SetPoint = 0.0
-    ITerm = 0.0
-    kP = 1.0
-    kI = 0.1
-    kD = 0.05
-    SampleTime = 1
-    OutMin = 0
-    OutMax = 60
-    Mode = 1
 
-    def __init__(self):
-        self.kP = 1.0
-        self.kI = 0.1
-        self.kD = 0.05
-        self.SetPoint = 1.0
-        self.SampleTime = 1
+class PID(object):
+
+    def __init__(self, P, I, D, cycleLen, mainFreq, sampleFreq):
+        self.Kp = P
+        self.Ki = I
+        self.Kd = D
+        self.Sv = 0.0
+        self.Pv = 0.0
+        self.SampleTime = sampleFreq
+        self.LastTime = 0
         self.OutMin = 0
-        self.OutMax = 60
-        self.ITerm = 0
-        self.LastError = 0
+        self.OutMax = math.ceil(cycleLen * mainFreq)
+        self.Output = 0
+        self.Mode = 1
 
     def Clamp(self, val):
         ret = val
@@ -38,31 +27,36 @@ class PID(object):
         return ret
 
 
-    def Compute(self, pv):
+    def Compute(self, Pv):
         if (self.Mode == 0):
             return
         now = time.monotonic()
-        timeChange = (now - self.LastTime)
-        if (timeChange >= self.SampleTime):
-            #Compute error variables
-            self.Input = pv
-            error = (self.SetPoint - self.Input)
-            self.ITerm += (error * timeChange)
-            doe = (error - self.LastError) / timeChange
-            self.LastError = error
-            self.Output = (error * self.kP) + (self.ITerm * self.kI) + (doe * self.kD)
-            
-            self.LastInput = self.Input
+        dt = (now - self.LastTime)
+        if (dt >= self.SampleTime):
+            #Compute Error
+            error = self.Sv - Pv
+            if error >= 10:
+                self.Output = self.OutMax
+            elif error <= 0:
+                self.Output = self.OutMin
+            else:
+                p = self.Kp * math.log(error)
+                i = 0
+                d = 0
+                output = p + i + d
+                self.Output = self.Clamp(output)
+
+            #Store Variables for next go
+            self.LastInput = self.Pv
             self.LastTime = now
-
     
-    def SetTarget(self, sv):
-        self.SetPoint = sv
+    def SetTarget(self, Sv):
+        self.Sv = Sv
 
-    def SetTunings(self, Kp, Ki, Kd):
-        self.kP = Kp
-        self.kI = Ki * self.SampleTime
-        self.kD = Kd / self.SampleTime
+    def SetTunings(self, Kpk, Ki, Kd):
+        self.Kp = Kp
+        self.Ki = Ki
+        self.Kd = Kd
 
     def SetOutputLimits(self, Min, Max):
         if (Min > Max):
@@ -71,7 +65,6 @@ class PID(object):
         self.OutMax = Max
 
         self.Output = self.Clamp(self.Output)
-        self.ITerm = self.Clamp(self.ITerm)
         
     def SetMode(self, Mode, Output):
         newAuto = (Mode == 1)
@@ -83,6 +76,4 @@ class PID(object):
         self.Mode = Mode
     
     def Initalize(self):
-        self.LastInput = self.Input
-        self.ITerm = self.Output
-        self.ITerm = self.Clamp(self.ITerm)
+        self.LastInput = self.Pv
