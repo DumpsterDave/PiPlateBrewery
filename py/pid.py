@@ -1,16 +1,18 @@
 import math
+from os import error
 import time
 
 class PID(object):
-    LastTime = 0.0
-    LastInput = 0.0
+    LastTime = None
+    LastInput = None
+    LastError = 0
     Input = 0.0
     Output = 0
     SetPoint = 0.0
     ITerm = 0.0
     kP = 1.0
-    kI = 3.0
-    kD = 0.2
+    kI = 0.1
+    kD = 0.05
     SampleTime = 1
     OutMin = 0
     OutMax = 60
@@ -18,12 +20,14 @@ class PID(object):
 
     def __init__(self):
         self.kP = 1.0
-        self.kI = 3.0
-        self.kD = 0.2
+        self.kI = 0.1
+        self.kD = 0.05
         self.SetPoint = 1.0
         self.SampleTime = 1
         self.OutMin = 0
         self.OutMax = 60
+        self.ITerm = 0
+        self.LastError = 0
 
     def Clamp(self, val):
         ret = val
@@ -42,17 +46,15 @@ class PID(object):
         if (timeChange >= self.SampleTime):
             #Compute error variables
             self.Input = pv
-            error = self.SetPoint - self.Input
-            self.ITerm += (self.kI * error)
-            self.ITerm = self.Clamp(self.ITerm)
-            dInput = (self.Input - self.LastInput)
+            error = (self.SetPoint - self.Input)
+            self.ITerm += (error * timeChange)
+            doe = (error - self.LastError) / timeChange
+            self.LastError = error
+            self.Output = (error * self.kP) + (self.ITerm * self.kI) + (doe * self.kD)
             
-            #Compute Output
-            self.Output = math.ceil(self.kP * error + self.ITerm - self.kD * dInput)
-            self.Output = self.Clamp(self.Output)
-            #Store Variables for next go
             self.LastInput = self.Input
             self.LastTime = now
+
     
     def SetTarget(self, sv):
         self.SetPoint = sv
