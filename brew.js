@@ -78,10 +78,10 @@ function RefreshElements() {
 
             //Process HLT Temp
             tempState = "TempOk";
-            HLTPv = Values["HLT"]['pv'];
+            HLTPv = Values["HLT"]['Pv'];
             if (Values["HLT"]['Mode'] == 1) {
                 HLTMode = 1;
-                HLTSv = Values["HLT"]['sv'];
+                HLTSv = Values["HLT"]['Sv'];
                 if (HLTPv < (HLTSv - HltDelta)) {
                     tempState = "TempLow";
                 } else if (HLTPv > (HLTSv + HltDelta)) {
@@ -105,8 +105,8 @@ function RefreshElements() {
 
             //Process Mash Temp
             tempState = "TempOk";
-            MTPv = Values["MT"]['pv'];
-            MTSv = Values["MT"]['sv'];
+            MTPv = Values["MT"]['Pv'];
+            MTSv = Values["MT"]['Sv'];
             if (MTPv < (MTSv - MtDelta)) {
                 tempState = "TempLow";
             } else if (MTPv > (MTSv + MtDelta)) {
@@ -118,10 +118,10 @@ function RefreshElements() {
 
             //Process BK Temp
             tempState = "TempOk";
-            BKPv = Values["BK"]['pv'];
+            BKPv = Values["BK"]['Pv'];
             if (Values["BK"]['Mode'] == 1) {
                 BKMode = 1;
-                BKSv = Values["BK"]['sv'];
+                BKSv = Values["BK"]['Sv'];
                 if (BKPv < (BKSv - BkDelta)) {
                     tempState = "TempLow";
                 } else if (BKPv > (BKSv + BkDelta)) {
@@ -144,12 +144,12 @@ function RefreshElements() {
             document.getElementById("BkTemp").className = tempState;       
 
             //Process HLT Output
-            document.getElementById('HltPidOutputBar').style.width = ((Values['HLT']['Output'] / 60) * 384) + 'px';
-            document.getElementById('HltPidOutputValue').innerHTML = ((Values['HLT']['Output'] / 60) * 100).toFixed(0) + '%';
+            document.getElementById('HltPidOutputBar').style.width = ((Values['HLT']['Output'] / 120) * 384) + 'px';
+            document.getElementById('HltPidOutputValue').innerHTML = ((Values['HLT']['Output'] / 120) * 100).toFixed(0) + '%';
 
             //Process BK Output
-            document.getElementById('BkPidOutputBar').style.width = ((Values['BK']['Output'] / 60) * 384) + 'px';
-            document.getElementById('BkPidOutputValue').innerHTML = ((Values['BK']['Output'] / 60) * 100).toFixed(0) + '%';
+            document.getElementById('BkPidOutputBar').style.width = ((Values['BK']['Output'] / 120) * 384) + 'px';
+            document.getElementById('BkPidOutputValue').innerHTML = ((Values['BK']['Output'] / 120) * 100).toFixed(0) + '%';
         }
         document.getElementById('tcpid').value = TcPID;
         if ((TcPID !== null) && (TcPID > 0)) {

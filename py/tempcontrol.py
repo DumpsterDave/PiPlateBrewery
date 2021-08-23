@@ -29,11 +29,14 @@ try:
     #Set our Start Time and next triggers for our SSRs
     startTime = round(time.time(), 1)
     #Set Cycle Length
-    CycleLength = MAINFREQ * math.ceil(Data['Global']['Cycle'])
+    CycleLength = Data['Global']['Cycle']
+    LoopMax = CycleLength * MAINFREQ
 
     #Setup PID Controllers
     HltPid = pid.PID(Data['HLT']['Kp'], Data['HLT']['Ki'], Data['HLT']['Kd'], CycleLength, MAINFREQ, 1)
     BkPid = pid.PID(Data['BK']['Kp'], Data['BK']['Ki'], Data['BK']['Kd'], CycleLength, MAINFREQ, 1)
+    HltPid.SetOutputLimits(Data['HLT']['OutMinPct'] * LoopMax, Data['HLT']['OutMaxPct'] * LoopMax)
+    BkPid.SetOutputLimits(Data['BK']['OutMinPct'] * LoopMax, Data['BK']['OutMaxPct'] * LoopMax)
 
     #Turn on Heatsink Fans
     DAQC2.setDOUTbit(DAQCPLATEADDR, 2)
@@ -176,10 +179,7 @@ try:
         HltPid.Compute(Data['HLT']['Pv'])
         BkPid.Compute(Data['BK']['Pv'])
 
-        #HltOff = math.ceil(HltPid.Output * Data['Global']['Cycle'])
-        #BkOff = math.ceil(BkPid.Output * Data['Global']['Cycle'])
-
-        for i in range(1, CycleLength):
+        for i in range(1, LoopMax):
             #Turn SSRs On if off and enabled
             if i == 1:
                 if HltPid.Output > 0 and Data['HLT']['Status'] == 0:

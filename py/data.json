@@ -1,39 +1,43 @@
 {
     "HLT": {
         "Sv": 60,
-        "Pv": 68.113,
-        "Kp": 43,
-        "Ki": 0,
-        "Kd": 0,
+        "Pv": 70.25,
+        "Kp": 50,
+        "Ki": 25,
+        "Kd": 0.2,
         "ITerm": 0,
-        "Output": 22,
+        "Output": 0,
         "Manual": 50,
         "Mode": 0,
         "Status": 0,
-        "HsTemp": 26.02,
-        "Delta": 1
+        "HsTemp": 25.12,
+        "Delta": 1,
+        "OutMinPct": 0.1,
+        "OutMaxPct": 1
     },
     "MT": {
         "Sv": 151,
-        "Pv": 69.013,
+        "Pv": 71.488,
         "Delta": 1
     },
     "BK": {
-        "Sv": 100,
-        "Pv": 103.888,
-        "Kp": 43,
-        "Ki": 0,
-        "Kd": 0,
+        "Sv": 140,
+        "Pv": 138.762,
+        "Kp": 50,
+        "Ki": 25,
+        "Kd": 0.2,
         "ITerm": 0,
-        "Output": 0,
+        "Output": 30,
         "Manual": 40,
         "Mode": 1,
         "Status": 0,
-        "HsTemp": 26.02,
-        "Delta": 1
+        "HsTemp": 25.33,
+        "Delta": 1,
+        "OutMinPct": 0.1,
+        "OutMaxPct": 1
     },
     "CPU": {
-        "HsTemp": 54.043
+        "HsTemp": 57.939
     },
     "Global": {
         "Cycle": 2

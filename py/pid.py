@@ -1,5 +1,6 @@
 from collections import deque
 import math
+import numpy
 import time
 
 
@@ -17,6 +18,7 @@ class PID(object):
         self.OutMax = math.ceil(CycleLen * MainFreq)
         self.Output = 0
         self.Mode = 1
+        self.CycleLength = CycleLen
 
     def Clamp(self, val):
         ret = val
@@ -40,10 +42,10 @@ class PID(object):
             elif error <= 0:
                 self.Output = self.OutMin
             else:
-                p = self.Kp * math.log(error)
-                i = 0
-                d = 0
-                output = p + i + d
+                p = self.Kp * numpy.log(error)
+                i = self.Ki
+                d = self.Kd * error
+                output = math.ceil(((p + i + d) / 100) * self.OutMax)
                 self.Output = self.Clamp(output)
 
             #Store Variables for next go
