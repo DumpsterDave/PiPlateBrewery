@@ -1,7 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import pid
-import piplates.THERMOplate as THERMO
-import piplates.DAQC2plate as DAQC2
+#import piplates.THERMOplate as THERMO
+#import piplates.DAQC2plate as DAQC2
+import megaind  #Industrial Automation Card
+import librtd  #RTD Data Aquisition Card
 from gpiozero import CPUTemperature
 from datetime import datetime
 import math
@@ -15,8 +17,10 @@ run = True
 
 try:
     #Variable Setup
-    THERMOPLATEADDR=0  #THERMOPlate Address
-    DAQCPLATEADDR=1  #DAQC2Plate Address
+    THERMOPLATEADDR=0   #THERMOPlate Address
+    DAQCPLATEADDR=1     #DAQC2Plate Address
+    INDADDR = 0         #Industrial Automation Card Address
+    RTDADDR = 1         #RTD Data Aquisition Card Address
     MAINFREQ = 60 #Frequency of Main Power feed (50/60Hz)
     
     #Initial Data Load
@@ -25,7 +29,8 @@ try:
     f.close()
 
     #Set THERMOplate Scale to Farenheit
-    THERMO.setSCALE('f')
+    #THERMO.setSCALE('f')
+    
     #Set our Start Time and next triggers for our SSRs
     startTime = round(time.time(), 1)
     #Set Cycle Length
@@ -39,17 +44,27 @@ try:
     BkPid.SetOutputLimits(Data['BK']['OutMinPct'] * LoopMax, Data['BK']['OutMaxPct'] * LoopMax)
 
     #Turn on Heatsink Fans
-    DAQC2.setDOUTbit(DAQCPLATEADDR, 2)
-    DAQC2.setDOUTbit(DAQCPLATEADDR, 3)
+    #DAQC2.setDOUTbit(DAQCPLATEADDR, 2)
+    #DAQC2.setDOUTbit(DAQCPLATEADDR, 3)
+
+    def GetRTD(channel, scale):
+        global RTDADDR
+        TempCel = librtd.get(RTDADDR, channel)
+        TempRet = TempCel
+        if scale == 'f':
+            TempRet = (TempCel * 1.8) + 32
+        if scale == 'k':
+            TempRet = TempCel + 273.15
+        return TempRet
 
     def GetHeatsink(channel):
-        global DAQCPLATEADDR
+        #global DAQCPLATEADDR
         corrected = 0
-        try:
-            vRef = DAQC2.getADC(DAQCPLATEADDR,8) * 10
-            corrected = (DAQC2.getADC(DAQCPLATEADDR,channel) * vRef)
-        except:
-            corrected = -1
+        #try:
+            #vRef = DAQC2.getADC(DAQCPLATEADDR,8) * 10
+            #corrected = (DAQC2.getADC(DAQCPLATEADDR,channel) * vRef)
+        #except:
+            #corrected = -1
         return round(corrected, 2)
 
     def GetCPU():
@@ -58,26 +73,34 @@ try:
 
     def TurnHLTOn():
         global DAQCPLATEADDR
+        global INDADDR
         global Data
-        DAQC2.setDOUTbit(DAQCPLATEADDR, 0)
+        #DAQC2.setDOUTbit(DAQCPLATEADDR, 0)
+        megaind.setOdPWM(INDADDR, 1, 100)
         Data['HLT']['Status'] = 1
 
     def TurnHLTOff():
         global DAQCPLATEADDR
+        global INDADDR
         global Data
-        DAQC2.clrDOUTbit(DAQCPLATEADDR, 0)
+        #DAQC2.clrDOUTbit(DAQCPLATEADDR, 0)
+        megaind.setOdPWM(INDADDR, 1, 0)
         Data['HLT']['Status'] = 0
 
     def TurnBKOn():
         global DAQCPLATEADDR
+        global INDADDR
         global Data
-        DAQC2.setDOUTbit(DAQCPLATEADDR, 1)
+        #DAQC2.setDOUTbit(DAQCPLATEADDR, 1)
+        megaind.setOdPWM(INDADDR, 2, 100)
         Data['BK']['Status'] = 1
 
     def TurnBKOff():
         global DAQCPLATEADDR
+        global INDADDR
         global Data
-        DAQC2.clrDOUTbit(DAQCPLATEADDR, 1)
+        #DAQC2.clrDOUTbit(DAQCPLATEADDR, 1)
+        megaind.setOdPWM(INDADDR, 2, 0)
         Data['BK']['Status'] = 0
 
     def OnKill(signum, frame):
@@ -85,8 +108,8 @@ try:
         run = False
         TurnHLTOff()
         TurnBKOff()
-        DAQC2.clrDOUTbit(DAQCPLATEADDR, 2)
-        DAQC2.clrDOUTbit(DAQCPLATEADDR, 3)
+        #DAQC2.clrDOUTbit(DAQCPLATEADDR, 2)
+        #DAQC2.clrDOUTbit(DAQCPLATEADDR, 3)
 
     def UpdateData():
         global Data, HltPid, BkPid
@@ -101,9 +124,12 @@ try:
         Data['HLT']['HsTemp'] = GetHeatsink(0)
         Data['CPU']['HsTemp'] = GetCPU()
         Data['BK']['HsTemp'] = GetHeatsink(1)
-        Data['HLT']['Pv'] = THERMO.getTEMP(0,11)
-        Data['MT']['Pv'] = THERMO.getTEMP(0,10)
-        Data['BK']['Pv'] = THERMO.getTEMP(0,9)
+        #Data['HLT']['Pv'] = THERMO.getTEMP(0,11)
+        #Data['MT']['Pv'] = THERMO.getTEMP(0,10)
+        #Data['BK']['Pv'] = THERMO.getTEMP(0,9)
+        Data['HLT']['Pv'] = GetRTD(1, 'f')
+        Data['MT']['Pv'] = GetRTD(2, 'f')
+        Data['BK']['Pv'] = GetRTD(3, 'f')
         
         #Get PID Data
         Data['HLT']['Output'] = HltPid.Output
