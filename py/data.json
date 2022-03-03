@@ -1,1 +1,45 @@
-{"HLT": {"Sv": 168, "Pv": 71.037, "Kp": 50, "Ki": 25, "Kd": 0.2, "ITerm": 0, "Output": 120, "Manual": 55, "Mode": 1, "Status": 0, "HsTemp": 25.38, "Delta": 1, "OutMinPct": 0.1, "OutMaxPct": 1}, "MT": {"Sv": 154, "Pv": 31.887, "Delta": 1}, "BK": {"Sv": 212, "Pv": 31.887, "Kp": 50, "Ki": 25, "Kd": 0.2, "ITerm": 0, "Output": 120, "Manual": 0, "Mode": 1, "Status": 0, "HsTemp": 25.94, "Delta": 1, "OutMinPct": 0.1, "OutMaxPct": 1}, "CPU": {"HsTemp": 57.939}, "Global": {"Cycle": 2}}
+{
+    "HLT": {
+        "Sv": 168,
+        "Pv": 65.65065956115723,
+        "Kp": 50,
+        "Ki": 25,
+        "Kd": 0.2,
+        "ITerm": 0,
+        "Output": 120,
+        "Manual": 55,
+        "Mode": 1,
+        "Status": 0,
+        "HsTemp": 24.578678131103516,
+        "Delta": 1,
+        "OutMinPct": 0,
+        "OutMaxPct": 1
+    },
+    "MT": {
+        "Sv": 154,
+        "Pv": 66.07648620605468,
+        "Delta": 1
+    },
+    "BK": {
+        "Sv": 100,
+        "Pv": 100.8426872253418,
+        "Kp": 50,
+        "Ki": 25,
+        "Kd": 0.2,
+        "ITerm": 0,
+        "Output": 0,
+        "Manual": 0,
+        "Mode": 1,
+        "Status": 0,
+        "HsTemp": 23.633684158325195,
+        "Delta": 1,
+        "OutMinPct": 0,
+        "OutMaxPct": 1
+    },
+    "CPU": {
+        "HsTemp": 51.121
+    },
+    "Global": {
+        "Cycle": 2
+    }
+}

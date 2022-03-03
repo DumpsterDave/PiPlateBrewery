@@ -46,6 +46,9 @@ try:
     #Turn on Heatsink Fans
     #DAQC2.setDOUTbit(DAQCPLATEADDR, 2)
     #DAQC2.setDOUTbit(DAQCPLATEADDR, 3)
+    
+    megaind.setOdPWM(INDADDR, 3, 100)
+    megaind.setOdPWM(INDADDR, 4, 100)
 
     def GetRTD(channel, scale):
         global RTDADDR
@@ -59,13 +62,14 @@ try:
 
     def GetHeatsink(channel):
         #global DAQCPLATEADDR
-        corrected = 0
+        #corrected = 0
         #try:
             #vRef = DAQC2.getADC(DAQCPLATEADDR,8) * 10
             #corrected = (DAQC2.getADC(DAQCPLATEADDR,channel) * vRef)
         #except:
             #corrected = -1
-        return round(corrected, 2)
+        #return round(corrected, 2)
+        return GetRTD(channel, 'c')
 
     def GetCPU():
         cpu = CPUTemperature()
@@ -104,12 +108,14 @@ try:
         Data['BK']['Status'] = 0
 
     def OnKill(signum, frame):
-        global run, DP
+        global run, DP, INDADDR
         run = False
         TurnHLTOff()
         TurnBKOff()
         #DAQC2.clrDOUTbit(DAQCPLATEADDR, 2)
         #DAQC2.clrDOUTbit(DAQCPLATEADDR, 3)
+        megaind.setOdPWM(INDADDR, 3, 0)
+        megaind.setOdPWM(INDADDR, 4, 0)
 
     def UpdateData():
         global Data, HltPid, BkPid
@@ -121,9 +127,9 @@ try:
         f.close()
 
         #Get Temperature Data
-        Data['HLT']['HsTemp'] = GetHeatsink(0)
+        Data['HLT']['HsTemp'] = GetHeatsink(4)
         Data['CPU']['HsTemp'] = GetCPU()
-        Data['BK']['HsTemp'] = GetHeatsink(1)
+        Data['BK']['HsTemp'] = GetHeatsink(5)
         #Data['HLT']['Pv'] = THERMO.getTEMP(0,11)
         #Data['MT']['Pv'] = THERMO.getTEMP(0,10)
         #Data['BK']['Pv'] = THERMO.getTEMP(0,9)
