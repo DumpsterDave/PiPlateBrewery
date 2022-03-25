@@ -14,6 +14,7 @@ import sys
 import signal
 
 run = True
+error_count = 0
 
 try:
     #Variable Setup
@@ -48,7 +49,6 @@ try:
     #DAQC2.setDOUTbit(DAQCPLATEADDR, 3)
     
     megaind.setOdPWM(INDADDR, 3, 100)
-    megaind.setOdPWM(INDADDR, 4, 100)
 
     def GetRTD(channel, scale):
         global RTDADDR
@@ -208,6 +208,11 @@ try:
 
     while run:
         UpdateData()
+        if error_count > 0:
+            megaind.setOdPWM(INDADDR, 4, 100)
+        else:
+            megaind.setOdPWM(INDADDR, 4, 0)
+            
         HltPid.Compute(Data['HLT']['Pv'])
         BkPid.Compute(Data['BK']['Pv'])
 
@@ -248,6 +253,7 @@ except Exception as e:
     f = open('/var/www/html/python_errors.log', 'a')
     f.write("%s - TEMP CONTROL [%i] - %s\n" % (now.strftime("%Y-%m-%d %H:%M:%S"), sys.exc_info()[-1].tb_lineno, e))
     f.close()
+    error_count += 1
 
 now = datetime.now()
 f = open('/var/www/html/python_errors.log', 'a')
