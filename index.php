@@ -89,6 +89,10 @@
                 <div class="PidOutputBar" id="HltPidOutputBar"></div>
                 <div class="PidOutputValue" id="HltPidOutputValue">50</div>
             </div>
+            <div class="PidOutputContainer" id="MtpH">
+                <div class="PidOutputBar" id="MtpHBar"></div>
+                <div class="PidOutputValue" id="MtpHValue">7</div>
+            </div>
             <div class="PidOutputContainer" id="BkPidOutput">
                 <div class="PidOutputBar" id="BkPidOutputBar"></div>
                 <div class="PidOutputValue" id="BkPidOutputValue">50</div>

@@ -142,10 +142,22 @@ function RefreshElements() {
             }
             document.getElementById("BkTempValue").innerHTML = BKPv.toFixed(1) + "&#8457;";
             document.getElementById("BkTemp").className = tempState;       
-
+            
             //Process HLT Output
             document.getElementById('HltPidOutputBar').style.width = ((Values['HLT']['Output'] / 120) * 384) + 'px';
             document.getElementById('HltPidOutputValue').innerHTML = ((Values['HLT']['Output'] / 120) * 100).toFixed(0) + '%';
+
+            //Process MT pH
+            var pH = (Values['MT']['pH']).toFixed(2);
+            document.getElementById('MtpHBar').style.width = ((Values['MT']['pH'] / 15) * 384) + 'px';
+            document.getElementById('MtpHValue').innerHTML = 'pH: ' + pH;
+            if (pH < 5.2) {
+                document.getElementById('MtpHBar').className = 'pHOutputBarLow';
+            } else if (pH > 5.6) {
+                document.getElementById('MtpHBar').className = 'pHOutputBarHigh';
+            } else {
+                document.getElementById('MtpHBar').className = 'pHOutputBarGood';
+            }
 
             //Process BK Output
             document.getElementById('BkPidOutputBar').style.width = ((Values['BK']['Output'] / 120) * 384) + 'px';

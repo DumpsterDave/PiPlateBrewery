@@ -23,6 +23,11 @@ try:
     INDADDR = 0         #Industrial Automation Card Address
     RTDADDR = 1         #RTD Data Aquisition Card Address
     MAINFREQ = 60 #Frequency of Main Power feed (50/60Hz)
+
+    #Load Config
+    f = open('/var/www/html/py/conf.json', 'r')
+    Settings = json.load(f)
+    f.close()
     
     #Initial Data Load
     f = open('/var/www/html/py/data.json', 'r')
@@ -50,6 +55,26 @@ try:
     
     megaind.setOdPWM(INDADDR, 3, 100)
 
+    def GetRTDCal(channel, scale):
+        global RTDADDR, Settings
+        TempCel = librtd.get(RTDADDR, channel)
+        TempRet = TempCel
+        if scale == 'f':
+            TempRet = (TempCel * 1.8) + 32
+        if scale == 'k':
+            TempRet = TempCel + 273.15
+        return Settings['RtdCalibrations'][channel]['m'] * TempRet + Settings['RtdCalibrations'][channel]['b']
+
+    def CalibrateProbes():
+        global Settings
+        #RTD
+        for x in range(len(Settings['RtdCalibrations'])):
+            Settings['RtdCalibrations'][x]['m'] = (float(Settings['RtdCalibrations'][x]['RtdHighCal']) - float(Settings['RtdCalibrations'][x]['RtdLowCal']))/(float(Settings['RtdCalibrations'][x]['RtdHigh']) - float(Settings['RtdCalibrations'][x]['RtdLow']))
+            Settings['RtdCalibrations'][x]['b'] = float(Settings['RtdCalibrations'][x]['RtdHighCal']) - Settings['RtdCalibrations'][x]['m'] * float(Settings['RtdCalibrations'][x]['RtdHigh'])
+        #pH
+        Settings['pHCalibrations']['m'] = (float(Settings['pHCalibrations']['HighRef']) - float(Settings['pHCalibrations']['LowRef']))/(float(Settings['pHCalibrations']['HighMeas']) - float(Settings['pHCalibrations']['LowMeas']))
+        Settings['pHCalibrations']['b'] = float(Settings['pHCalibrations']['HighRef']) - Settings['pHCalibrations']['m'] * float(Settings['pHCalibrations']['HighMeas'])
+
     def GetRTD(channel, scale):
         global RTDADDR
         TempCel = librtd.get(RTDADDR, channel)
@@ -59,6 +84,13 @@ try:
         if scale == 'k':
             TempRet = TempCel + 273.15
         return TempRet
+
+    def GetpH(channel):
+        global INDADDR
+        global Settings
+        raw = megaind.get0_10In(INDADDR, channel)
+        cal = raw * Settings['pHCalibrations']['m'] + Settings['pHCalibrations']['b']
+        return (-5.6548 * cal) + 15.509
 
     def GetHeatsink(channel):
         #global DAQCPLATEADDR
@@ -133,10 +165,13 @@ try:
         #Data['HLT']['Pv'] = THERMO.getTEMP(0,11)
         #Data['MT']['Pv'] = THERMO.getTEMP(0,10)
         #Data['BK']['Pv'] = THERMO.getTEMP(0,9)
-        Data['HLT']['Pv'] = GetRTD(1, 'f')
-        Data['MT']['Pv'] = GetRTD(2, 'f')
-        Data['BK']['Pv'] = GetRTD(3, 'f')
+        Data['HLT']['Pv'] = GetRTDCal(1, 'f')
+        Data['MT']['Pv'] = GetRTDCal(2, 'f')
+        Data['BK']['Pv'] = GetRTDCal(3, 'f')
         
+        #pH
+        Data['MT']['pH'] = GetpH(1)
+
         #Get PID Data
         Data['HLT']['Output'] = HltPid.Output
         Data['HLT']['Kp'] = HltPid.Kp
@@ -205,6 +240,8 @@ try:
 
     signal.signal(signal.SIGINT, OnKill)
     signal.signal(signal.SIGTERM, OnKill)
+
+    CalibrateProbes()
 
     while run:
         UpdateData()

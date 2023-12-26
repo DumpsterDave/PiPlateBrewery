@@ -197,6 +197,33 @@ a {
     border-radius: 8px;
 }
 
+.pHOutputBarLow {
+    background-color: #ed1c2488;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 32px;
+    border-radius: 8px;
+}
+
+.pHOutputBarGood {
+    background-color: #22b14c88;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 32px;
+    border-radius: 8px;
+}
+
+.pHOutputBarHigh {
+    background-color: #3f48cc88;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    height: 32px;
+    border-radius: 8px;
+}
+
 .PidOutputValue {
     position: absolute;
     left: 0px;
@@ -326,6 +353,15 @@ a {
 }
 
 #HltPidOutputBar {
+    width: 384px;
+}
+
+#MtpH {
+    left: 448px;
+    top: 656px;
+}
+
+#MtpHBar {
     width: 384px;
 }
 
