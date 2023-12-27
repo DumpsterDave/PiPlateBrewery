@@ -54,6 +54,7 @@ try:
     #DAQC2.setDOUTbit(DAQCPLATEADDR, 3)
     
     megaind.setOdPWM(INDADDR, 3, 100)
+    megaind.set0_10Out(INDADDR, 1, 5.0)
 
     def GetRTDCal(channel, scale):
         global RTDADDR, Settings
@@ -148,6 +149,7 @@ try:
         #DAQC2.clrDOUTbit(DAQCPLATEADDR, 3)
         megaind.setOdPWM(INDADDR, 3, 0)
         megaind.setOdPWM(INDADDR, 4, 0)
+        megaind.set0_10Out(INDADDR, 1, 0)
 
     def UpdateData():
         global Data, HltPid, BkPid
