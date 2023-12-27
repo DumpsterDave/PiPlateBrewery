@@ -39,6 +39,7 @@ try:
     
     #Set our Start Time and next triggers for our SSRs
     startTime = round(time.time(), 1)
+    
     #Set Cycle Length
     CycleLength = Data['Global']['Cycle']
     LoopMax = CycleLength * MAINFREQ
@@ -49,10 +50,7 @@ try:
     HltPid.SetOutputLimits(Data['HLT']['OutMinPct'] * LoopMax, Data['HLT']['OutMaxPct'] * LoopMax)
     BkPid.SetOutputLimits(Data['BK']['OutMinPct'] * LoopMax, Data['BK']['OutMaxPct'] * LoopMax)
 
-    #Turn on Heatsink Fans
-    #DAQC2.setDOUTbit(DAQCPLATEADDR, 2)
-    #DAQC2.setDOUTbit(DAQCPLATEADDR, 3)
-    
+    #Turn on Heatsink Fans and 5v out for pH meter
     megaind.setOdPWM(INDADDR, 3, 100)
     megaind.set0_10Out(INDADDR, 1, 5.0)
 
